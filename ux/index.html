@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SlipComposer — 화면 · 플로우 명세</title>
-<meta name="description" content="SlipComposer iOS 앱의 전체 화면과 사용자 흐름. UX/UI 리뷰를 받기 위한 구조 명세.">
+<title>SlipComposer 리뷰 팩</title>
+<meta name="description" content="SlipComposer iOS 앱의 전체 화면·흐름·기능 장단점·수익 구조. 외부 UX·디자인·사업성 리뷰를 받기 위한 자료.">
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -288,10 +288,11 @@
 
 <header class="mast">
   <p class="eyebrow">SlipComposer · iOS 1.0 · 심사 제출 직전</p>
-  <h1>화면 · 플로우 명세</h1>
+  <h1>제품 · 화면 · 사업성</h1>
   <p class="lede">
-    앱 전체 화면 22개와 그 사이의 흐름입니다. UX·UI 평가를 받기 위해
-    코드에서 직접 뽑아 정리했습니다.
+    앱 전체 화면 22개, 그 사이의 흐름, 기능별 장단점, 그리고 수익·비용 구조입니다.
+    외부에서 <b>디자인·UX 평가</b>와 <b>사업성 판단</b>을 모두 할 수 있도록
+    코드와 스펙에서 직접 뽑아 정리했습니다.
   </p>
 </header>
 
@@ -320,8 +321,30 @@
   </p>
   <p>
     <b>베팅을 받지 않고 돈을 보관하지 않습니다.</b> 앱 안에서 실제 베팅을 걸 수
-    있는 경로는 없습니다. 수익은 구독과 다이아 판매에서 나옵니다.
-    종목은 축구·농구·야구·NHL·NFL·e스포츠·핸드볼입니다.
+    있는 경로는 없습니다. 종목은 축구·농구·야구·NHL·NFL·e스포츠·핸드볼이고,
+    7개 언어(한국어·영어·스페인어·포르투갈어·독일어·일본어·중국어)를 지원합니다.
+  </p>
+</div>
+
+<div class="note">
+  <h3>제품의 중심 주장 — 「신뢰도」가 무엇인지</h3>
+  <p>
+    앱 곳곳에 나오는 <b>신뢰도(Trust) %</b>는 북메이커 마진(overround)을 제거한
+    <b>시장 컨센서스 확률</b>입니다. "우리가 더 잘 맞힌다"가 아니라
+    <b>"시장이 이 결과를 이 정도로 본다"</b>입니다.
+  </p>
+  <p>
+    이 구분이 제품 전체를 규정합니다. 경쟁 예측 앱들이 "AI 적중률 90%"를 파는
+    자리에서 이 앱은 <b>예측 우위를 주장하지 않습니다</b>. 그래서
+    App Store 5.3(도박) 리젝 리스크가 구조적으로 낮고, 대신
+    <b>소구력이 약해 보일 위험</b>을 안습니다.
+    <b>이 교환이 옳은지가 사업성 평가의 첫 질문입니다.</b>
+  </p>
+  <p>
+    데이터는 StatPal(축구 심층 통계 + 배당)과 Highlightly(비축구 경기 배열)에서
+    받아 자체 백엔드가 정제하고, 앱 전용 BFF가 조립합니다. 종목은
+    <b>데이터가 검증된 뒤에만</b> 노출됩니다 — 배당이 붙은 예정 경기가 5개 미만인
+    종목은 탭에 나와도 흐리게 처리됩니다.
   </p>
 </div>
 
@@ -346,6 +369,116 @@
     <div><span class="n">TAB 5</span><b>프로필</b><span>계정 · 프리셋 · 설정 · 법적 고지</span></div>
   </div>
 </div>
+
+
+<!-- ================================================================== -->
+<section class="sec-wrap">
+  <p class="sec-kicker">Product</p>
+  <h2 class="sec">기능별 장단점</h2>
+  <p class="sec-lede">
+    기능마다 무엇이 강점이고 무엇이 약점인지, 그리고 저희가 아직 답을 모르는
+    것이 무엇인지. <b>약점 칸은 방어하지 않고 적었습니다</b> — 그게 리뷰를
+    받는 이유입니다.
+  </p>
+
+  <div class="scroll-x">
+    <table class="matrix">
+      <thead>
+        <tr><th style="min-width:9rem;">기능</th><th style="min-width:15rem;">강점</th><th style="min-width:15rem;">약점</th><th style="min-width:13rem;">열린 질문</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><b>컨센서스 신뢰도</b><br><span style="font-size:11.5px;">모든 화면의 % 수치</span></td>
+          <td>마진을 제거한 정직한 숫자. 과장 마케팅 없이 장기 신뢰를 쌓는 구조.
+              도박 정책 리젝 리스크가 낮습니다.</td>
+          <td><b>차별점이 안 보입니다.</b> "시장 컨센서스"는 설명이 필요한 개념이고,
+              경쟁 앱의 "AI 적중률"은 설명이 필요 없습니다.</td>
+          <td>정직함을 <b>마케팅 자산</b>으로 세울 수 있습니까,
+              아니면 그냥 약한 소구입니까?</td>
+        </tr>
+        <tr>
+          <td><b>슬립 컴포저</b><br><span style="font-size:11.5px;">7단계 마법사</span></td>
+          <td>순수 예측 앱에는 없는 기능. 목표 배당을 넣으면 거기 맞춰 조합을
+              만들어 주는 것은 실제로 손이 많이 가는 일을 대신해 줍니다.</td>
+          <td><b>7단계는 깁니다.</b> 1단계에 "바로 생성" 단축이 있는데,
+              그러면 나머지 6단계의 존재 이유가 흐려집니다.</td>
+          <td>단축을 기본으로 하고 마법사를 "세부 설정"으로 숨겨야 합니까?</td>
+        </tr>
+        <tr>
+          <td><b>경기 찾기</b><br><span style="font-size:11.5px;">조건 검색 + 유료 열람</span></td>
+          <td>사기 전에 <b>개수와 분포를 무료로</b> 봅니다. 필터가 쓸모 있었는지
+              판단하고 살 수 있습니다. 열람한 경기는 영구 보관·재사용.</td>
+          <td>페이월이 하나 더 있는 셈입니다. 구독자도 일일 한도를 넘으면
+              또 다이아를 씁니다.</td>
+          <td>"세어 주고 팔기"가 공정하게 느껴집니까, 감질나게 느껴집니까?</td>
+        </tr>
+        <tr>
+          <td><b>종목별 스마트 필터</b></td>
+          <td>같은 조건이라도 종목마다 의미가 다르다는 걸 반영합니다.
+              "2.5 오버"는 축구에서만 질문이고 농구에서는 항상 참입니다.</td>
+          <td>종목을 바꾸면 <b>고른 칩이 소리 없이 사라집니다.</b>
+              안내 한 줄뿐입니다.</td>
+          <td>사라지는 것을 어떻게 알려야 합니까?</td>
+        </tr>
+        <tr>
+          <td><b>자동 채점</b><br><span style="font-size:11.5px;">내 슬립</span></td>
+          <td><b>재방문 동기의 핵심.</b> 결과가 스스로 돌아오는 것이
+              앱을 다시 열 이유를 만듭니다. CSV로 내보낼 수도 있습니다.</td>
+          <td>멀티레그 슬립은 원래 적중률이 낮습니다. 정직한 34%가
+              <b>이탈을 만들 수도</b> 있습니다.</td>
+          <td>적중률을 크게 보여주는 게 맞습니까? 맥락을 같이 줘야 합니까?</td>
+        </tr>
+        <tr>
+          <td><b>프리셋 + 기록</b></td>
+          <td>조건 묶음을 저장하고 <b>그 프리셋의 성적</b>을 추적합니다.
+              시장 컨센서스 대비 성적까지 나옵니다. 헤비 유저를 묶는 장치.</td>
+          <td>프로필 안쪽에 묻혀 있습니다. 만드는 곳(경기 찾기)과
+              보관하는 곳(프로필)이 다릅니다.</td>
+          <td>프리셋이 <b>독립 탭</b>이어야 할 만큼 중요한 기능입니까?</td>
+        </tr>
+        <tr>
+          <td><b>7개 언어</b></td>
+          <td>솔로 개발 앱치고 드문 커버리지. 날짜·복수형·통화까지
+              현지화돼 있습니다.</td>
+          <td>번역만으로는 시장이 열리지 않습니다.
+              <b>리그 커버리지와 마케팅은 언어를 따라가지 않습니다.</b></td>
+          <td>7개를 얕게 하는 것과 2~3개를 깊게 하는 것 중 어느 쪽입니까?</td>
+        </tr>
+        <tr>
+          <td><b>데이터 게이팅</b><br><span style="font-size:11.5px;">feed-health</span></td>
+          <td>배당이 검증된 종목만 노출합니다. <b>빈 화면을 구조적으로 막습니다.</b></td>
+          <td>종목이 임계값 근처에서 <b>나타났다 사라집니다.</b>
+              야구가 지금 그렇습니다.</td>
+          <td>사용자에게 "이 종목은 오늘 없습니다"를 어떻게 설명해야 합니까?</td>
+        </tr>
+        <tr>
+          <td colspan="4" style="background:var(--panel-sub);"><b>없는 것</b></td>
+        </tr>
+        <tr>
+          <td><b>라이브 스코어</b></td>
+          <td>—</td>
+          <td>Sofascore·Flashscore가 가진 <b>"매일 여는 이유"</b>가 없습니다.
+              경기 중에는 앱을 열 일이 없습니다.</td>
+          <td>이게 치명적입니까, 아니면 다른 앱의 일입니까?</td>
+        </tr>
+        <tr>
+          <td><b>커뮤니티 · 공유</b></td>
+          <td>—</td>
+          <td>팁스터·리더보드·슬립 공유가 없습니다.
+              <b>바이럴 장치가 전무합니다.</b> 획득은 전부 유료여야 합니다.</td>
+          <td>슬립 공유 하나만이라도 넣어야 합니까?</td>
+        </tr>
+        <tr>
+          <td><b>제휴(affiliate)</b></td>
+          <td>북메이커로 내보내지 않아 정책 리스크가 낮습니다.</td>
+          <td>동종 앱의 <b>가장 큰 수익원을 포기</b>했습니다.
+              구독과 다이아만으로 버텨야 합니다.</td>
+          <td>이 포기가 원칙입니까, 아니면 다시 볼 일입니까?</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
 
 
 <!-- ================================================================== -->
@@ -1620,8 +1753,172 @@
 </section>
 
 
+<!-- ================================================================== -->
+<section class="sec-wrap">
+  <p class="sec-kicker">Business</p>
+  <h2 class="sec">사업성 — 무엇을 어떻게 파는가</h2>
+  <p class="sec-lede">
+    아래 가격은 전부 <b>확정값</b>입니다(App Store Connect에 등록된 15개 SKU).
+    다이아 소비량과 무료 지급량은 서버 코드의 실제 상수입니다.
+  </p>
+
+  <h3 style="font-size:16px; font-weight:800; margin:26px 0 4px;">인앱 상품 15개</h3>
+  <div class="scroll-x">
+    <table class="matrix">
+      <thead><tr><th>구분</th><th>상품</th><th>가격 (USD)</th><th>비고</th></tr></thead>
+      <tbody>
+        <tr><td rowspan="3"><b>구독</b><br><span style="font-size:11.5px;">자동 갱신</span></td>
+            <td>Basic 월 / 연</td><td>$9.99 / $99.99</td>
+            <td rowspan="3">연간은 <b>12개월 가격에서 2개월 할인</b>(≈17%).
+                주간·6개월은 2026-09-03에 폐기 — 3티어 × 4주기면 비교할 가격이
+                12개고, 주간 결제는 이탈할 사람을 골라냅니다.</td></tr>
+        <tr><td>Pro 월 / 연</td><td>$19.99 / $199.99</td></tr>
+        <tr><td>Unlimited 월 / 연</td><td>$29.99 / $299.99</td></tr>
+        <tr><td rowspan="2"><b>다이아</b><br><span style="font-size:11.5px;">소모성</span></td>
+            <td>10 / 55 / 120💎</td><td>$0.99 / $4.99 / $9.99</td>
+            <td rowspan="2">큰 팩일수록 단가가 내려갑니다:
+                <span class="mono">$0.099/💎 → $0.067/💎</span></td></tr>
+        <tr><td>260 / 700 / 1,500💎</td><td>$19.99 / $49.99 / $99.99</td></tr>
+        <tr><td><b>프리셋 슬롯</b><br><span style="font-size:11.5px;">영구</span></td>
+            <td>+1 / +3 / +10</td><td>$0.99 / $1.99 / $4.99</td>
+            <td>한 번 사면 유지됩니다. 가장 작은 매출원.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 style="font-size:16px; font-weight:800; margin:30px 0 4px;">다이아가 실제로 무엇을 사는가</h3>
+  <div class="scroll-x">
+    <table class="matrix">
+      <thead><tr><th>행동</th><th>비용</th><th>큰 팩 기준 환산</th><th>작은 팩 기준</th></tr></thead>
+      <tbody>
+        <tr><td>슬립 1개 생성 <span style="font-size:11.5px;">(일일 무료분 소진 후)</span></td>
+            <td class="mono">10💎</td><td class="mono">$0.67</td><td class="mono">$0.99</td></tr>
+        <tr><td>경기 1개 열람</td><td class="mono">5💎</td>
+            <td class="mono">$0.33</td><td class="mono">$0.50</td></tr>
+        <tr><td>29경기 일괄 열람 <span style="font-size:11.5px;">(0.6배 할인)</span></td>
+            <td class="mono">87💎</td><td class="mono">$5.80</td><td class="mono">$8.61</td></tr>
+        <tr><td>일괄 열람 상한</td><td class="mono">200💎</td>
+            <td class="mono">$13.33</td><td class="mono">—</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note">
+    <h3>구독과 다이아가 서로를 잡아먹습니다 — 의도된 것인지 확인이 필요합니다</h3>
+    <p>
+      Basic($9.99/월)이 주는 것은 하루 슬립 5개 + 열람 5개, 30일이면
+      <b>슬립 150개 + 열람 150개 = 2,250💎</b>입니다.
+      같은 양을 다이아로 사면 가장 싼 팩 단가로도 <b>약 $150</b>입니다.
+    </p>
+    <p>
+      즉 <b>구독이 다이아보다 15배 싸고</b>, Pro는 22배입니다. 규칙적으로 쓰는
+      사람은 반드시 구독으로 갑니다. 퍼널 설계로는 옳지만,
+      <b>다이아 매출은 "무료 티어를 막 넘어선 사람"에게만 남습니다.</b>
+      다이아 팩 6개가 그만한 가치가 있는지가 질문입니다.
+    </p>
+  </div>
+
+  <div class="note known">
+    <h3>무료 사용자가 돈 없이 받는 것 — 계산해 보면 적지 않습니다</h3>
+    <ul>
+      <li><b>가입 시 100💎</b> (영구 지갑, 만료 없음) = 슬립 10개 또는 열람 20개</li>
+      <li><b>매일 로그인 10💎</b> (상한 100💎) = 한 달 최대 300💎 = 슬립 30개</li>
+      <li><b>하루 슬립 1개</b>는 다이아 없이 무료 = 한 달 30개</li>
+      <li>검색은 하루 10회까지 무료 (열람만 유료)</li>
+    </ul>
+    <p style="margin-top:8px;">
+      합치면 <b>첫 달에 돈 한 푼 없이 슬립 약 70개</b>를 만들 수 있습니다.
+      광고는 배너 하나뿐이고, <b>Basic($9.99)부터 광고가 사라집니다</b> —
+      즉 광고 매출은 무료 사용자에게서만 나오는데 그 무료 사용자가
+      꽤 오래 무료로 지낼 수 있습니다.
+      <b>무료 티어가 너무 관대한지가 두 번째 질문입니다.</b>
+    </p>
+  </div>
+
+  <h3 style="font-size:16px; font-weight:800; margin:30px 0 4px;">비용 구조</h3>
+  <div class="scroll-x">
+    <table class="matrix">
+      <thead><tr><th>항목</th><th>성격</th><th>규모를 정하는 것</th></tr></thead>
+      <tbody>
+        <tr><td><b>배당 데이터 (StatPal)</b></td><td>변동비 — 가장 큽니다</td>
+            <td>배당 갱신이 <b>리그당 유료 호출 1회</b>씩 발생하고
+                기본 주기가 <b>1시간</b>입니다. 즉
+                <span class="mono">리그 수 × 24 × 30</span> 호출/월.
+                노출 종목을 늘리면 <b>사용자와 무관하게</b> 비용이 오릅니다.</td></tr>
+        <tr><td><b>Highlightly</b></td><td>변동비</td>
+            <td>비축구 종목의 경기 배열. 종목 수에 비례.</td></tr>
+        <tr><td><b>Railway 호스팅</b></td><td>준고정비</td>
+            <td>백엔드 + PostgreSQL. 트래픽이 붙기 전까지 사실상 고정.</td></tr>
+        <tr><td><b>Firebase</b></td><td>거의 0</td>
+            <td>인증·푸시·크래시·분석. 이 규모에서는 무료 한도 안.</td></tr>
+        <tr><td><b>Apple 수수료</b></td><td>매출의 15% 또는 30%</td>
+            <td>연 100만 달러 미만이면 <b>Small Business Program 15%</b>.
+                Basic $9.99 → 실수령 <span class="mono">$8.49</span>.</td></tr>
+        <tr><td><b>인건비</b></td><td>—</td>
+            <td>1인 개발·운영. 현금 비용에는 안 잡히지만
+                <b>단일 실패 지점</b>입니다.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note">
+    <h3>손익분기 — 딱 한 숫자가 비어 있습니다</h3>
+    <p>
+      구조는 단순합니다:
+      <span class="mono">필요 구독자 수 = (StatPal + Highlightly + Railway) ÷ (구독가 × 0.85)</span>
+    </p>
+    <p>
+      Basic만으로 채운다면 구독자 1명당 월 <span class="mono">$8.49</span>가
+      들어옵니다. <b>월 고정·변동비가 $850이면 100명, $2,000이면 236명</b>입니다.
+    </p>
+    <p>
+      <b>이 문서에서 유일하게 비어 있는 값이 StatPal 계약 단가입니다.</b>
+      호출 수는 위 공식으로 정확히 나오지만 단가는 계약서에 있습니다.
+      사업성을 판단하시려면 그 숫자부터 채워야 하고,
+      <b>그것이 이 사업의 가장 중요한 단일 변수</b>입니다 —
+      리그를 늘리면 사용자가 없어도 비용이 오르기 때문입니다.
+    </p>
+  </div>
+
+  <h3 style="font-size:16px; font-weight:800; margin:30px 0 4px;">경쟁 지형</h3>
+  <div class="scroll-x">
+    <table class="matrix">
+      <thead><tr><th>구분</th><th>SlipComposer</th><th>Forebet · Betmines<br><span style="font-size:11px;">예측형</span></th><th>Sofascore · Flashscore<br><span style="font-size:11px;">스코어형</span></th><th>Oddspedia · OLBG<br><span style="font-size:11px;">오즈·팁스터형</span></th></tr></thead>
+      <tbody>
+        <tr><td><b>핵심</b></td><td>컨센서스 + 슬립 조합</td><td>AI 승률 예측</td><td>라이브 스코어</td><td>오즈 비교 · 커뮤니티 팁</td></tr>
+        <tr><td><b>신뢰도 표기</b></td><td><b>마진 제거 컨센서스</b></td><td>"AI 적중률" (과장 경향)</td><td>부가적</td><td>팁스터 승률</td></tr>
+        <tr><td><b>멀티레그 조합</b></td><td><b>✅ 핵심 기능</b></td><td>일부 (단식 위주)</td><td>❌</td><td>❌</td></tr>
+        <tr><td><b>라이브·인플레이</b></td><td>❌</td><td>제한적</td><td><b>✅ 강점</b></td><td>부분</td></tr>
+        <tr><td><b>커뮤니티</b></td><td>❌</td><td>부분</td><td>코멘트</td><td><b>✅ 강점</b></td></tr>
+        <tr><td><b>수익 모델</b></td><td>구독 + 다이아</td><td>광고 + 구독</td><td>광고 + 구독</td><td><b>제휴</b></td></tr>
+        <tr><td><b>정책 리스크</b></td><td><b>낮음</b> (베팅 유도 없음)</td><td>중간</td><td>낮음</td><td>높음</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note known">
+    <h3>주요 리스크</h3>
+    <ul>
+      <li><b>데이터 벤더 단일 의존</b> — StatPal이 가격을 올리거나 서비스를
+          멈추면 제품이 멈춥니다. 대체 수단이 준비돼 있지 않습니다.</li>
+      <li><b>비용이 사용자가 아니라 리그 수에 비례</b> — 종목을 넓히면
+          매출과 무관하게 비용이 먼저 오릅니다.</li>
+      <li><b>재방문 동기가 채점 하나</b> — 라이브 스코어도 커뮤니티도 없어
+          경기 중에는 열 이유가 없습니다.</li>
+      <li><b>획득 경로가 없습니다</b> — 공유·초대·바이럴 장치가 전무해
+          모든 유입이 유료 광고이거나 ASO입니다.</li>
+      <li><b>App Store 5.3</b> — 정책 리스크는 낮게 설계했지만
+          심사자 재량은 남습니다. 리젝되면 출시 자체가 멈춥니다.</li>
+      <li><b>1인 운영</b> — 개발·서버·CS·심사 대응이 모두 한 사람입니다.</li>
+    </ul>
+  </div>
+</section>
+
+
 <footer class="end">
   <h2>어떤 피드백이 필요한가</h2>
+
+  <p style="color:var(--ink); font-weight:600; margin:0 0 8px;">디자인 · UX</p>
   <ol>
     <li><b>7단계 마법사</b>가 가장 걱정입니다. 1단계의 "바로 생성" 단축과
         나머지 6단계가 서로를 무의미하게 만드는지.</li>
@@ -1633,14 +1930,36 @@
         선택입니다. 지금은 카드마다 붙습니다.</li>
     <li><b>진입 게이트 3연속</b> — 연령 · 동의 · 온보딩. 첫인상을 해치는지.</li>
   </ol>
+
+  <p style="color:var(--ink); font-weight:600; margin:18px 0 8px;">사업성</p>
+  <ol start="6">
+    <li><b>"예측 우위를 주장하지 않는다"</b>가 지킬 만한 포지션입니까?
+        경쟁 앱이 "AI 적중률 90%"를 파는 시장에서 정직함이 팔립니까?</li>
+    <li><b>무료 티어가 너무 관대합니까?</b> 첫 달에 돈 없이 슬립 70개를
+        만들 수 있고, $9.99부터 광고가 사라집니다.</li>
+    <li><b>다이아 팩 6개가 필요합니까?</b> 규칙적으로 쓰는 사람에게
+        구독이 15~22배 싸므로, 다이아는 무료 티어 바로 위 구간에만 남습니다.</li>
+    <li><b>비용이 사용자가 아니라 리그 수에 비례</b>합니다. 종목을 넓힐수록
+        매출과 무관하게 비용이 먼저 오릅니다. 어디서 멈춰야 합니까?</li>
+    <li><b>획득 경로가 없습니다.</b> 공유·초대·리더보드가 전무합니다.
+        무엇을 하나만 넣는다면 무엇입니까?</li>
+  </ol>
+
   <p>
     화면 단위 지적도 좋고, "이 앱은 결국 무엇을 하는 앱인지 모르겠다" 같은
     큰 이야기도 좋습니다. 후자가 사실 더 필요합니다.
   </p>
+  <p>
+    <b>수정 제안은 구체적으로 주셔도 좋습니다</b> — 어느 화면의 무엇을 어떻게
+    바꾸라는 수준까지. 반영 여부는 저희가 판단하지만, 근거가 붙은 지적일수록
+    실제로 반영됩니다.
+  </p>
   <p class="fine">
     SlipComposer는 오락·정보 제공 목적입니다. 베팅을 받지 않고 자금을
     보관하지 않습니다. 이 문서의 와이어프레임은 코드에서 재구성한 구조도이며
-    실제 화면의 스크린샷이 아닙니다. · 문의 ceo.sharppicklab@gmail.com
+    실제 화면의 스크린샷이 아닙니다. 가격은 App Store Connect 등록값,
+    다이아 소비량·무료 지급량·갱신 주기는 서버 코드의 실제 상수입니다.
+    StatPal 계약 단가만 비어 있습니다. · 문의 ceo.sharppicklab@gmail.com
   </p>
 </footer>
 
