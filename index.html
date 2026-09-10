@@ -130,6 +130,15 @@
   .step.todo .lbl{color:var(--muted)}
   .step .bar{width:34px;height:2px;background:var(--surface-alt);margin:0 4px}
   @media(max-width:640px){.step .bar{display:none}.timeline{gap:10px}}
+
+  /* Korean bilingual text (병기) */
+  .ko{display:block;color:var(--muted);font-weight:400;font-size:.9em;line-height:1.55;margin-top:5px}
+  h1 .ko{font-size:.46em;font-weight:800;color:var(--muted);margin-top:10px}
+  h2 .ko{font-size:.5em;font-weight:700;color:var(--muted);margin-top:6px}
+  .card h3 .ko{font-size:.82em;font-weight:600;color:var(--muted);margin-top:3px}
+  .fact b .ko{font-size:.85em;font-weight:600;margin-top:2px}
+  .cap .ko{font-size:.92em;margin-top:1px}
+  .step .lbl .ko{font-size:.85em;margin-top:0}
 </style>
 </head>
 <body>
@@ -152,14 +161,17 @@
 <div class="hero">
   <div class="wrap hero-grid">
     <div>
-      <span class="status"><span class="live"></span> In App Store review · Coming soon</span>
-      <h1>Sports stats &amp; a smarter <span class="hl">slip builder</span>.</h1>
+      <span class="status"><span class="live"></span> In App Store review · Coming soon · 심사 진행 중</span>
+      <h1>Sports stats &amp; a smarter <span class="hl">slip builder</span>.
+        <span class="ko">스포츠 통계와 더 똑똑한 슬립 빌더</span></h1>
       <p class="lead">
         SlipComposer turns live sports-betting market odds into clear,
         at-a-glance predictions and lets you build and track practice slips —
         for entertainment and information only.
+        <span class="ko">실시간 스포츠 마켓 배당을 한눈에 읽히는 예측으로 바꾸고, 연습용
+        슬립을 만들고 결과를 추적합니다 — 오락·정보 제공 목적 전용입니다.</span>
       </p>
-      <span class="pill" style="margin-bottom:20px">📊 Entertainment &amp; information only — not a betting operator</span>
+      <span class="pill" style="margin-bottom:20px">📊 Entertainment &amp; information only — not a betting operator · 오락·정보 전용, 베팅 운영자 아님</span>
       <div class="cta-row">
         <a class="btn" href="#get">Coming soon to the App Store</a>
         <a class="btn ghost" href="#features">See what it does</a>
@@ -175,34 +187,45 @@
 <!-- FEATURES -->
 <section id="features">
   <div class="wrap">
-    <span class="eyebrow">What it does</span>
-    <h2>From market odds to a clear read</h2>
+    <span class="eyebrow">What it does · 주요 기능</span>
+    <h2>From market odds to a clear read
+      <span class="ko">마켓 배당을 명확한 예측으로</span></h2>
     <p class="section-sub">Every number is derived from real bookmaker markets and
-      shown as an implied chance — no hype, no guarantees.</p>
+      shown as an implied chance — no hype, no guarantees.
+      <span class="ko">모든 수치는 실제 북메이커 마켓에서 도출한 내재 확률이며, 과장이나
+      보장은 없습니다.</span></p>
     <div class="features">
       <div class="card">
         <div class="ic">🎯</div>
-        <h3>Market-consensus predictions</h3>
+        <h3>Market-consensus predictions <span class="ko">마켓 컨센서스 예측</span></h3>
         <p>De-vigged odds show the implied chance for each outcome across markets —
-          match winner, over/under, both teams to score, double chance.</p>
+          match winner, over/under, both teams to score, double chance.
+          <span class="ko">마진을 제거한 배당으로 승패·오버언더·양팀득점·더블찬스 등
+          각 결과의 내재 확률을 보여줍니다.</span></p>
       </div>
       <div class="card">
         <div class="ic">🧩</div>
-        <h3>Slip builder</h3>
+        <h3>Slip builder <span class="ko">슬립 빌더</span></h3>
         <p>Assemble a multi-leg practice slip by risk level and see the combined
-          implied chance. Save slips and track hits and misses over time.</p>
+          implied chance. Save slips and track hits and misses over time.
+          <span class="ko">리스크 수준별로 멀티 레그 연습 슬립을 구성하고 합산 내재
+          확률을 확인하세요. 저장하고 적중·실패를 추적합니다.</span></p>
       </div>
       <div class="card">
         <div class="ic">⚖️</div>
-        <h3>Compare bookmakers</h3>
+        <h3>Compare bookmakers <span class="ko">북메이커 비교</span></h3>
         <p>See odds across books and how a line has moved, so you understand where
-          the market consensus sits.</p>
+          the market consensus sits.
+          <span class="ko">여러 북메이커의 배당과 라인 변화를 비교해 시장 컨센서스가
+          어디에 있는지 파악합니다.</span></p>
       </div>
       <div class="card">
         <div class="ic">⚽</div>
-        <h3>Multi-sport</h3>
+        <h3>Multi-sport <span class="ko">멀티 스포츠</span></h3>
         <p>Football today, with more sports lighting up as data becomes available.
-          Follow teams &amp; leagues and filter your feed.</p>
+          Follow teams &amp; leagues and filter your feed.
+          <span class="ko">현재는 축구, 데이터가 확보되는 대로 종목을 확장합니다. 팀·리그를
+          팔로우하고 피드를 필터링하세요.</span></p>
       </div>
     </div>
   </div>
@@ -211,33 +234,35 @@
 <!-- SCREENS -->
 <section id="screens" style="padding-top:8px">
   <div class="wrap">
-    <span class="eyebrow">A look inside</span>
-    <h2>Designed to be read at a glance</h2>
-    <p class="section-sub">A clean, dark interface built for quick scanning.</p>
+    <span class="eyebrow">A look inside · 화면 미리보기</span>
+    <h2>Designed to be read at a glance
+      <span class="ko">한눈에 읽히는 디자인</span></h2>
+    <p class="section-sub">A clean, dark interface built for quick scanning.
+      <span class="ko">빠르게 훑어보기 좋은 깔끔한 다크 인터페이스.</span></p>
     <div class="shots">
       <figure class="shot" style="margin:0">
         <div class="frame"><img src="screenshots/01-predictions.png" alt="Predictions" loading="lazy"></div>
-        <figcaption class="cap">Predictions feed</figcaption>
+        <figcaption class="cap">Predictions feed<span class="ko">예측 피드</span></figcaption>
       </figure>
       <figure class="shot" style="margin:0">
         <div class="frame"><img src="screenshots/02-match-detail.png" alt="Match detail" loading="lazy"></div>
-        <figcaption class="cap">Match detail &amp; odds</figcaption>
+        <figcaption class="cap">Match detail &amp; odds<span class="ko">경기 상세 &amp; 배당</span></figcaption>
       </figure>
       <figure class="shot" style="margin:0">
         <div class="frame"><img src="screenshots/03-betwizard.png" alt="Slip builder" loading="lazy"></div>
-        <figcaption class="cap">Slip builder</figcaption>
+        <figcaption class="cap">Slip builder<span class="ko">슬립 빌더</span></figcaption>
       </figure>
       <figure class="shot" style="margin:0">
         <div class="frame"><img src="screenshots/03-betwizard-result.png" alt="Slip result" loading="lazy"></div>
-        <figcaption class="cap">Generated slip</figcaption>
+        <figcaption class="cap">Generated slip<span class="ko">생성된 슬립</span></figcaption>
       </figure>
       <figure class="shot" style="margin:0">
         <div class="frame"><img src="screenshots/04-my-slips.png" alt="My slips" loading="lazy"></div>
-        <figcaption class="cap">My Slips &amp; tracking</figcaption>
+        <figcaption class="cap">My Slips &amp; tracking<span class="ko">내 슬립 &amp; 추적</span></figcaption>
       </figure>
       <figure class="shot" style="margin:0">
         <div class="frame"><img src="screenshots/05-responsible-gaming.png" alt="Responsible gaming" loading="lazy"></div>
-        <figcaption class="cap">Responsible play</figcaption>
+        <figcaption class="cap">Responsible play<span class="ko">책임 있는 이용</span></figcaption>
       </figure>
     </div>
   </div>
@@ -246,34 +271,43 @@
 <!-- COMPLIANCE / RESPONSIBLE -->
 <div class="band" id="responsible">
   <section class="wrap">
-    <span class="eyebrow">Important</span>
-    <h2>Entertainment, not wagering</h2>
+    <span class="eyebrow">Important · 중요 고지</span>
+    <h2>Entertainment, not wagering
+      <span class="ko">베팅이 아닌 오락·정보 서비스</span></h2>
     <p class="section-sub">SlipComposer is a statistics and information app. It is
-      designed for adults and takes responsible play seriously.</p>
+      designed for adults and takes responsible play seriously.
+      <span class="ko">SlipComposer는 통계·정보 앱으로, 성인 대상이며 책임 있는 이용을
+      중요하게 여깁니다.</span></p>
     <div class="grid">
       <div class="fact"><span class="dot">•</span><div>
-        <b>Not a betting operator</b>
-        <span>The app does not accept wagers, place bets, or handle real money.</span>
+        <b>Not a betting operator <span class="ko">베팅 운영자가 아님</span></b>
+        <span>The app does not accept wagers, place bets, or handle real money.
+          <span class="ko">베팅을 받거나 대신 걸지 않으며 실제 자금을 취급하지 않습니다.</span></span>
       </div></div>
       <div class="fact"><span class="dot">•</span><div>
-        <b>Virtual coins only</b>
-        <span>In-app coins have no monetary value and cannot be cashed out.</span>
+        <b>Virtual coins only <span class="ko">가상 재화만 사용</span></b>
+        <span>In-app coins have no monetary value and cannot be cashed out.
+          <span class="ko">앱 내 코인은 금전적 가치가 없으며 환금할 수 없습니다.</span></span>
       </div></div>
       <div class="fact"><span class="dot">•</span><div>
-        <b>No guaranteed outcomes</b>
-        <span>Predictions are estimates from public odds — not advice, not certainties.</span>
+        <b>No guaranteed outcomes <span class="ko">결과 미보장</span></b>
+        <span>Predictions are estimates from public odds — not advice, not certainties.
+          <span class="ko">예측은 공개 배당에서 도출한 추정치이며, 조언이나 확정이 아닙니다.</span></span>
       </div></div>
       <div class="fact"><span class="dot">•</span><div>
-        <b>Adults only</b>
-        <span>You must be of legal age in your jurisdiction to use the app.</span>
+        <b>Adults only <span class="ko">성인 전용</span></b>
+        <span>You must be of legal age in your jurisdiction to use the app.
+          <span class="ko">거주 지역의 법적 성인 연령 이상만 이용할 수 있습니다.</span></span>
       </div></div>
       <div class="fact"><span class="dot">•</span><div>
-        <b>Play responsibly</b>
-        <span>If betting stops being fun, seek support — e.g. BeGambleAware, NCPG (1-800-522-4700).</span>
+        <b>Play responsibly <span class="ko">책임 있는 이용</span></b>
+        <span>If betting stops being fun, seek support — e.g. BeGambleAware, NCPG (1-800-522-4700).
+          <span class="ko">문제가 느껴지면 도움을 받으세요 — 한국 도박문제예방치유원 1336.</span></span>
       </div></div>
       <div class="fact"><span class="dot">•</span><div>
-        <b>Your data, your control</b>
-        <span>Sign-in is optional; you can delete your account and data anytime.</span>
+        <b>Your data, your control <span class="ko">데이터 자기결정</span></b>
+        <span>Sign-in is optional; you can delete your account and data anytime.
+          <span class="ko">로그인은 선택이며, 계정과 데이터를 언제든 삭제할 수 있습니다.</span></span>
       </div></div>
     </div>
   </section>
@@ -282,19 +316,22 @@
 <!-- GET -->
 <section id="get" style="text-align:center">
   <div class="wrap">
-    <span class="status"><span class="live"></span> In App Store review · Coming soon</span>
-    <h2>Launching soon on the App Store</h2>
+    <span class="status"><span class="live"></span> In App Store review · Coming soon · 심사 진행 중</span>
+    <h2>Launching soon on the App Store
+      <span class="ko">App Store 출시 임박</span></h2>
     <p class="section-sub" style="margin-left:auto;margin-right:auto">
       The app is built and submitted — currently in Apple's App Store review.
-      iOS launch is imminent. <b style="color:var(--text)">App Store 심사 진행 중 · 출시 임박.</b></p>
+      iOS launch is imminent. <b style="color:var(--text)">App Store 심사 진행 중 · 출시 임박.</b>
+      <span class="ko">앱 개발을 마치고 제출을 완료해 현재 Apple App Store 심사 중이며,
+      iOS 출시가 임박했습니다.</span></p>
     <div class="timeline">
-      <div class="step done"><span class="mk">✓</span><span class="lbl">Built</span></div>
+      <div class="step done"><span class="mk">✓</span><span class="lbl">Built<span class="ko">개발 완료</span></span></div>
       <span class="bar"></span>
-      <div class="step done"><span class="mk">✓</span><span class="lbl">Submitted</span></div>
+      <div class="step done"><span class="mk">✓</span><span class="lbl">Submitted<span class="ko">제출 완료</span></span></div>
       <span class="bar"></span>
-      <div class="step now"><span class="mk">●</span><span class="lbl">In App Store review</span></div>
+      <div class="step now"><span class="mk">●</span><span class="lbl">In App Store review<span class="ko">심사 진행 중</span></span></div>
       <span class="bar"></span>
-      <div class="step todo"><span class="mk">4</span><span class="lbl">Launch</span></div>
+      <div class="step todo"><span class="mk">4</span><span class="lbl">Launch<span class="ko">출시</span></span></div>
     </div>
     <div class="cta-row" style="justify-content:center;margin-top:18px">
       <span class="pill">🍎 App Store — coming soon</span>
@@ -322,6 +359,14 @@
       predictive edge, and no outcome is guaranteed. Virtual coins are an in-app
       item with no cash value. You are responsible for complying with the laws of
       your jurisdiction. © <span id="yr"></span> SlipComposer.
+    </p>
+    <p class="disclaimer" style="border-top:none;padding-top:8px" lang="ko">
+      SlipComposer는 스포츠 경기에 대한 통계·마켓 컨센서스 정보를 오락 및 정보 제공
+      목적으로만 제공합니다. 도박 서비스가 아니며, 베팅을 받거나 대신 걸지 않고, 실제
+      자금을 취급하지 않으며, 금융·투자·베팅 자문을 제공하지 않습니다. "트러스트"·내재
+      확률 수치는 마진을 제거한 북메이커 컨센서스일 뿐 예측 우위가 아니며, 어떤 결과도
+      보장하지 않습니다. 가상 코인은 앱 내 재화로 금전적 가치가 없습니다. 이용자는 자신이
+      속한 관할의 법규를 준수할 책임이 있습니다.
     </p>
   </div>
 </footer>
