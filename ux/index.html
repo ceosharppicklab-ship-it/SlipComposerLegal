@@ -257,6 +257,17 @@
   .d-ad { border: 1px dashed #4A4F3A; color: #6E7260; text-align: center;
           font-size: 9.5px; padding: 7px 0; border-radius: 6px; }
 
+  .shots { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+           gap: 18px; margin: 24px 0 8px; }
+  .shot figure { margin: 0; }
+  .shot img {
+    width: 100%; max-width: 100%; height: auto; display: block;
+    border: 1px solid var(--rule-2); border-radius: 14px; background: #121212;
+  }
+  .shot figcaption { margin-top: 8px; font-size: 12.5px; color: var(--muted); }
+  .shot figcaption b { color: var(--ink); display: block; font-size: 13px; margin-bottom: 3px; }
+  .shot .delta { color: var(--flag); display: block; margin-top: 4px; font-size: 12px; }
+
   table.matrix {
     width: 100%; border-collapse: collapse; font-size: 13px; margin: 18px 0 8px;
   }
@@ -355,6 +366,8 @@
     <li><b>프리셋 카드 레이아웃</b>이 정리되지 않았습니다 — 조건 요약이 길어지면 줄이 깨집니다.</li>
     <li><b>독일어 배당 표기</b>가 소수점 구분자를 섞어 씁니다 (<code>1.85</code>와 <code>Über 2,5</code>).</li>
     <li>아이콘은 1차 버전입니다. 홈 화면 크기에서 종목 구분이 약하다는 건 알고 있습니다.</li>
+    <li><b>랜딩 페이지의 출시 상태 문구와 스크린샷이 현재 진행 상황보다 앞서 있습니다.</b>
+        갱신 예정입니다 — 아래 「랜딩 페이지」 절에 무엇이 어긋났는지 적어 뒀습니다.</li>
   </ul>
 </div>
 
@@ -1714,8 +1727,303 @@
 
 <!-- ================================================================== -->
 <section class="sec-wrap">
+  <p class="sec-kicker">Captures</p>
+  <h2 class="sec">실제 화면 캡처 — 단, 이전 빌드입니다</h2>
+  <p class="sec-lede">
+    지금 가진 실기기 캡처는 <b>2026년 8월 빌드</b>의 것입니다.
+    <b>시각 언어(다크 + 라임, 카드 형태, 타이포)를 평가하시기엔 여전히 유효</b>하지만,
+    구조는 위의 구조도가 맞습니다. 무엇이 달라졌는지 각 캡처 아래에 적었습니다.
+  </p>
+
+  <div class="note known">
+    <h3>모든 캡처에 공통으로 어긋난 것</h3>
+    <ul>
+      <li>하단 탭이 <b>4개</b>(Predictions · BetWizard · Premium · Profile)입니다.
+          현재는 <b>5개</b>이고 「내 슬립」이 탭으로 올라왔습니다.</li>
+      <li>컴포저 탭 이름이 <b>BetWizard</b>입니다. 현재는 <b>컴포저</b>입니다.</li>
+      <li>UI가 영어 고정입니다. 현재는 7개 언어입니다.</li>
+    </ul>
+  </div>
+
+  <div class="shots">
+    <div class="shot"><figure>
+      <img src="../screenshots/01-predictions.png" alt="예측 피드 (2026-08 빌드)" loading="lazy">
+      <figcaption><b>예측 피드</b>
+        날짜 칩 · 마켓 칩 · 리그 필터 · 정렬이 한 화면에 겹쳐 있는 것은 지금도 같습니다.
+        신뢰도 칩과 배당의 시각 처리도 현재와 동일합니다.
+        <span class="delta">달라진 것: 리그명이 「League 6982」로 나옵니다 —
+          이름 없는 리그 처리가 그 뒤에 들어갔습니다. 종목 탭이 영어이고
+          「American Football」로 표기됩니다.</span>
+      </figcaption>
+    </figure></div>
+
+    <div class="shot"><figure>
+      <img src="../screenshots/03-betwizard.png" alt="슬립 빌더 진입 (2026-08 빌드)" loading="lazy">
+      <figcaption><b>슬립 빌더 진입</b>
+        <span class="delta">가장 크게 달라진 화면입니다. 이 캡처는
+          <b>「AI-Assisted Bet Slips」</b>라고 말합니다 — 현재는
+          <b>「시장 컨센서스 베팅 슬립」</b>입니다. AI 표현을 의도적으로 걷어냈습니다.
+          예측 우위를 주장하지 않는다는 것이 이 제품의 중심 주장이기 때문입니다.
+          단계도 3개에서 7개로 늘었고, 다이아 잔액 40000은 개발 계정 값입니다.</span>
+      </figcaption>
+    </figure></div>
+
+    <div class="shot"><figure>
+      <img src="../screenshots/03-betwizard-result.png" alt="슬립 결과 (2026-08 빌드)" loading="lazy">
+      <figcaption><b>슬립 결과</b>
+        총 배당을 크게 두고 레그를 아래에 쌓는 구성은 지금도 같습니다.
+        <span class="delta">현재는 목표 배당 충족 여부, 사용자가 지정한 경기가
+          빠졌는지, 경기당 평균 신뢰도가 추가돼 있습니다.</span>
+      </figcaption>
+    </figure></div>
+
+    <div class="shot"><figure>
+      <img src="../screenshots/02-match-detail.png" alt="경기 상세 (2026-08 빌드)" loading="lazy">
+      <figcaption><b>경기 상세</b>
+        최근 폼 · 상대전적 · 배당 비교의 카드 구성.
+        <span class="delta">현재는 「예측 / 비교」 탭으로 나뉘고 비교 탭이
+          Pro 잠금입니다. 시장 일치도와 「비슷한 경기」가 추가됐습니다.</span>
+      </figcaption>
+    </figure></div>
+
+    <div class="shot"><figure>
+      <img src="../screenshots/04-my-slips.png" alt="내 슬립 (2026-08 빌드)" loading="lazy">
+      <figcaption><b>내 슬립</b>
+        <span class="delta">뒤로가기가 있는 하위 화면입니다 — 현재는 하단 탭입니다.
+          누적 적중률 헤더, 「저장한 슬립 / 열람한 경기」 탭, CSV 내보내기가
+          전부 그 뒤에 들어왔습니다.</span>
+      </figcaption>
+    </figure></div>
+
+    <div class="shot"><figure>
+      <img src="../screenshots/06-profile.png" alt="프로필 (2026-08 빌드)" loading="lazy">
+      <figcaption><b>프로필</b>
+        <span class="delta">현재는 내 프리셋 · 언어 · 분석 동의 토글 · 계정 삭제가
+          추가돼 목록이 길어졌습니다.</span>
+      </figcaption>
+    </figure></div>
+
+    <div class="shot"><figure>
+      <img src="../screenshots/05-responsible-gaming.png" alt="책임감 있는 베팅 (2026-08 빌드)" loading="lazy">
+      <figcaption><b>책임감 있는 베팅</b>
+        <span class="delta">현재와 가장 가까운 화면입니다. 구조는 그대로이고
+          7개 언어로 번역됐습니다.</span>
+      </figcaption>
+    </figure></div>
+  </div>
+
+  <div class="ask" style="max-width:44rem;">
+    <p>리뷰 포인트</p>
+    <ul>
+      <li>구조를 빼고 <b>시각 언어만</b> 봐 주세요 — 다크 배경 위 라임 포인트,
+          카드 간격, 타이포 위계, 숫자 표현. 그 부분은 지금도 같습니다.</li>
+      <li>라임(<code>#CCFF00</code>)이 <b>너무 많이 쓰이는지.</b> 배당·픽·버튼·탭
+          강조에 전부 같은 색을 씁니다.</li>
+      <li>카드가 <b>전부 같은 무게</b>입니다. 무엇이 중요한지 형태로 구분되지
+          않는다는 지적이 있을 수 있습니다.</li>
+    </ul>
+  </div>
+</section>
+
+
+<!-- ================================================================== -->
+<section class="sec-wrap">
+  <p class="sec-kicker">Web</p>
+  <h2 class="sec">랜딩 페이지 — 앱 밖의 첫인상</h2>
+  <p class="sec-lede">
+    앱만큼 중요한 디자인 면입니다. 이 사이트의 루트(<code>/</code>)에 있고,
+    앱 스토어 심사자와 잠재 사용자가 개인정보 처리방침 링크를 타고 들어옵니다.
+    <a href="../">지금 열어보기 →</a>
+  </p>
+
+  <div class="screen">
+    <div>
+      <div class="dev">
+        <div class="dev-cap">WEB · LANDING</div>
+        <div class="dev-body" style="gap:9px;">
+          <div class="d-btn" style="background:#2C2C34;color:#CCFF00;font-size:9.5px;">
+            🚀 Now in App Store review — 심사 진행 중</div>
+          <div class="d-m" style="color:#CCFF00;">● In App Store review · Coming soon</div>
+          <div class="d-h" style="font-size:14px;">Sports stats &amp; a smarter
+            <span style="color:#CCFF00;">slip builder</span>.</div>
+          <div class="d-m">스포츠 통계와 더 똑똑한 슬립 빌더</div>
+          <div class="d-m" style="font-size:9.5px;">SlipComposer turns live
+            sports-betting market odds into clear, at-a-glance predictions…</div>
+          <div class="d-m" style="font-size:9.5px;">실시간 스포츠 마켓 배당을
+            한눈에 읽히는 예측으로 바꾸고…</div>
+          <div class="d-chip" style="align-self:flex-start;">📊 Entertainment only · 오락 전용</div>
+          <div class="d-btn">Coming soon to the App Store</div>
+          <div class="d-btn ghost">See what it does</div>
+          <div class="d-ad">📱 스크린샷 (01-predictions)</div>
+          <div class="d-h" style="font-size:11px;">What it does · 주요 기능</div>
+          <div class="d-m">🎯 Market-consensus predictions · 마켓 컨센서스 예측</div>
+          <div class="d-m">🧾 Slip builder · 슬립 빌더</div>
+          <div class="d-m">⚖️ Compare bookmakers · 북메이커 비교</div>
+          <div class="d-m">🏅 Multi-sport · 멀티 스포츠</div>
+          <div class="d-h" style="font-size:11px;">A look inside · 화면 미리보기</div>
+          <div class="d-ad">📱 스크린샷 6장 갤러리</div>
+          <div class="d-h" style="font-size:11px;">Entertainment, not wagering</div>
+          <div class="d-m">· 베팅 운영자가 아님 · 가상 재화만 사용</div>
+          <div class="d-m">· 결과 미보장 · 성인 전용</div>
+          <div class="d-h" style="font-size:11px;">Launching soon</div>
+          <div class="d-m">빌드 → 제출 → <span style="color:#CCFF00;">● 심사 진행 중</span></div>
+          <div class="d-chip" style="align-self:center;">🍎 App Store — coming soon</div>
+        </div>
+      </div>
+    </div>
+    <div class="spec">
+      <h3>랜딩 페이지</h3>
+      <p class="path">index.html · 375줄 · 한/영 병기 · GitHub Pages</p>
+      <dl>
+        <dt>구성</dt>
+        <dd>
+          <ul>
+            <li><b>리본</b> — 출시 상태 한 줄</li>
+            <li><b>히어로</b> — 헤드라인 · 설명 · 면책 칩 · CTA 2개 · 앱 스크린샷</li>
+            <li><b>주요 기능</b> — 카드 4개</li>
+            <li><b>화면 미리보기</b> — 스크린샷 6장</li>
+            <li><b>오락이지 베팅이 아님</b> — 컴플라이언스 4항목</li>
+            <li><b>출시 예정</b> — 진행 단계 표시 + 스토어 배지</li>
+          </ul>
+        </dd>
+        <dt>언어 처리</dt>
+        <dd><b>모든 문장이 영어 + 한국어로 두 번</b> 나옵니다. 언어 전환 없이
+            병기하는 방식입니다.</dd>
+        <dt>지금 어긋난 것</dt>
+        <dd>
+          <ul>
+            <li><b>출시 상태</b> — 6곳에서 "제출 완료, 심사 진행 중"이라고
+                말하지만 <b>아직 제출 전</b>입니다. 갱신 필요.</li>
+            <li><b>스크린샷 6장</b>이 위와 같은 이전 빌드입니다.
+                그중 하나는 <b>「AI-Assisted」</b>라고 적혀 있어
+                제품의 현재 주장과 정면으로 어긋납니다.</li>
+            <li><b>CTA가 갈 곳이 없습니다</b> — 「Coming soon」 버튼 두 개 다
+                실제 링크가 없습니다.</li>
+          </ul>
+        </dd>
+      </dl>
+      <div class="ask">
+        <p>리뷰 포인트</p>
+        <ul>
+          <li><b>전면 병기가 읽힙니까?</b> 모든 줄이 두 번 나오면 길이가 두 배가
+              되고 어느 쪽도 주 언어로 읽히지 않습니다. 언어 토글로 나눠야 합니까?</li>
+          <li>히어로 헤드라인이 <b>"slip builder"</b>를 강조합니다. 그런데 앱의
+              중심 주장은 "정직한 컨센서스"입니다. <b>랜딩과 앱이 서로 다른 것을
+              팔고 있습니까?</b></li>
+          <li>컴플라이언스 섹션이 <b>4항목이나 됩니다.</b> 신뢰를 주는지,
+              방어적으로 보이는지.</li>
+          <li>출시 전 랜딩에 <b>무엇이 있어야</b> 합니까 — 대기자 명단?
+              베타 신청? 지금은 눌러도 아무 일이 없습니다.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ================================================================== -->
+<section class="sec-wrap">
   <p class="sec-kicker">Reference</p>
-  <h2 class="sec">플랜별로 무엇이 열리나</h2>
+  <h2 class="sec">화면별 기능 인벤토리</h2>
+  <p class="sec-lede">
+    22개 화면이 각각 무엇을 할 수 있는지 한 표로. 위의 화면 카드가 설명이라면
+    이건 목록입니다 — 빠진 기능을 찾거나, 어느 화면이 과부하인지 세어 보실 때.
+  </p>
+
+  <div class="scroll-x">
+    <table class="matrix">
+      <thead>
+        <tr><th style="min-width:8rem;">화면</th><th style="min-width:20rem;">할 수 있는 것</th><th style="min-width:9rem;">상태 · 게이트</th></tr>
+      </thead>
+      <tbody>
+        <tr><td colspan="3" style="background:var(--panel-sub);"><b>진입 (첫 실행에만)</b></td></tr>
+        <tr><td>연령 확인</td><td>18세 이상 확인 후 통과</td><td>1회, 이후 저장</td></tr>
+        <tr><td>분석 동의</td><td>익명 사용 데이터 수집 동의 / 거부</td><td>1회, 프로필에서 변경 가능</td></tr>
+        <tr><td>온보딩</td><td>3장 넘기기 · 건너뛰기 · 시작하기</td><td>1회 · 끝나면 컴포저 탭</td></tr>
+
+        <tr><td colspan="3" style="background:var(--panel-sub);"><b>탭 1 · 예측</b></td></tr>
+        <tr><td>예측 피드</td>
+            <td>종목 전환(전체 포함) · 날짜 선택 · 마켓 전환 · 리그 필터 ·
+                리그☆팔로우 · 정렬(리그/시간) · 즐겨찾기만 보기 ·
+                경기 카드 탭 → 상세 · 빈 날이면 다음 경기 날짜로 이동</td>
+            <td>마켓 전환 <span class="pill pro">PRO</span><br>배너 광고(무료)</td></tr>
+        <tr><td>경기 상세</td>
+            <td>컨센서스 픽 · 최근 5경기 폼(전적·평균 득실) · 상대전적 ·
+                시장 일치도 · 비슷한 경기 · 팀☆팔로우</td>
+            <td>—</td></tr>
+        <tr><td>└ 비교 탭</td>
+            <td>배당 변동(시가→최신) · 북메이커별 가격 · 최고가 하이라이트 ·
+                컨센서스 대비 % · 큰 변동 표시</td>
+            <td><span class="pill pro">PRO</span></td></tr>
+
+        <tr><td colspan="3" style="background:var(--panel-sub);"><b>탭 2 · 컴포저</b></td></tr>
+        <tr><td>컴포저 홈</td><td>「베팅 슬립 / 경기 찾기」 전환 · 7단계 미리보기 · 바로 생성</td><td>—</td></tr>
+        <tr><td>7단계 마법사</td>
+            <td>1 종목(다중) · 2 위험(3단계) · 3 기간(1~30일) · 4 레그 수 또는 자동 ·
+                5 팀·리그 · 6 조건 필터 · 7 목표 배당 범위 ·
+                단계 건너뛰기 · 1단계에서 바로 생성</td>
+            <td>5·6단계 <span class="pill pro">PRO</span><br>생성 <span class="pill paid">10💎</span></td></tr>
+        <tr><td>슬립 결과</td>
+            <td>총 배당 · 레그 목록(킥오프·리그·픽·배당·신뢰도) ·
+                목표 충족 여부 · 지정 경기 포함/제외 안내 ·
+                경기당 평균 신뢰도 · 저장</td>
+            <td>저장은 수동</td></tr>
+        <tr><td>경기 찾기</td>
+            <td>종목 탭(전체 포함) · 스마트 필터 선택 · 정밀 필터 ·
+                기간 슬라이더 · 검색 · 프리셋으로 저장</td>
+            <td>정밀 필터 <span class="pill pro">PRO</span><br>검색 10회/일(무료)</td></tr>
+        <tr><td>└ 필터 시트</td>
+            <td>스마트 필터 칩 전체(종목별로 달라짐) · 저장된 프리셋 실행 · 적용</td>
+            <td>프리셋 슬롯 제한</td></tr>
+        <tr><td>└ 검색 결과</td>
+            <td>총 개수 · 리그 분포 · 날짜 분포 · 정렬 전환 ·
+                1개 / 5개 / 전체 열람 구매</td>
+            <td>열람 <span class="pill paid">5💎~</span></td></tr>
+        <tr><td>└ 열람한 경기</td>
+            <td>경기 목록 · 충족 조건 증거 칩(수치+표본) · 선택 · 슬립 만들기</td>
+            <td>—</td></tr>
+        <tr><td>└ 슬립 빌더</td>
+            <td>전체 선택/해제 · 「선택한 경기만」 또는 「더 큰 슬립에 포함」 · 생성</td>
+            <td>생성 <span class="pill paid">10💎</span></td></tr>
+
+        <tr><td colspan="3" style="background:var(--panel-sub);"><b>탭 3 · 프리미엄</b></td></tr>
+        <tr><td>프리미엄</td>
+            <td>혜택 5줄 · 구독 6종 · 다이아 6팩 · 슬롯 3팩 · 구매 ·
+                구매 복원 · 약관/개인정보 링크 · 잔액 표시</td>
+            <td>상품 15개</td></tr>
+        <tr><td>플랜 비교</td><td>4개 플랜 카드 비교 · 구매 화면으로 이동</td><td>프로필에서도 진입</td></tr>
+
+        <tr><td colspan="3" style="background:var(--panel-sub);"><b>탭 4 · 내 슬립</b></td></tr>
+        <tr><td>저장한 슬립</td>
+            <td>적중/실패/대기 목록 · 누적 적중률 · 승패 · 당겨서 채점 갱신 ·
+                삭제 · CSV 내보내기</td>
+            <td>저장 한도(플랜별)</td></tr>
+        <tr><td>열람한 경기</td><td>구매한 경기 재사용 · 여기서 다시 슬립 생성</td><td>경기 시작 전까지</td></tr>
+
+        <tr><td colspan="3" style="background:var(--panel-sub);"><b>탭 5 · 프로필</b></td></tr>
+        <tr><td>프로필</td>
+            <td>Apple/Google 로그인 · 다이아 잔액 · 플랜 배지 ·
+                하위 7개 화면 진입 · 분석 동의 토글 · 로그아웃 · 계정 삭제</td>
+            <td>—</td></tr>
+        <tr><td>내 프리셋</td>
+            <td>목록 · 드래그 재정렬 · 실행(경기 찾기) · 슬립 즉시 생성 ·
+                삭제 · 기록 보기 · 슬롯 초과분 「잠김」 표시</td>
+            <td>슬롯 수(플랜별 + 구매)</td></tr>
+        <tr><td>프리셋 기록</td>
+            <td>전체/최근 30일 전환 · 적중률 · 컨센서스 대비 · 슬립별 결과 ·
+                표본 부족 시 숫자 숨김</td>
+            <td>—</td></tr>
+        <tr><td>베팅 금액 계산</td>
+            <td>자금·배당·승률 입력 · 고정 2% · 전체/½/¼ 켈리 · 우위 없으면 0 표시</td>
+            <td>교육용, 서버 미연동</td></tr>
+        <tr><td>언어</td><td>시스템 기본 + 7개 언어 · 즉시 반영</td><td>재시작 불필요</td></tr>
+        <tr><td>책임감 있는 베팅</td><td>안내 · 지침 6개 · 면책 · 도움받을 곳</td><td>심사 확인 항목</td></tr>
+        <tr><td>약관 · 개인정보</td><td>전문 열람 · 최종 수정일</td><td>앱 내 표시(웹뷰 아님)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2 class="sec" style="margin-top:44px;">플랜별로 무엇이 열리나</h2>
   <p class="sec-lede">
     UX 판단에 필요한 경계입니다. 어떤 화면이 무료 사용자에게 어떻게 보이는지가
     여기서 결정됩니다.
@@ -1931,8 +2239,15 @@
     <li><b>진입 게이트 3연속</b> — 연령 · 동의 · 온보딩. 첫인상을 해치는지.</li>
   </ol>
 
-  <p style="color:var(--ink); font-weight:600; margin:18px 0 8px;">사업성</p>
+  <p style="color:var(--ink); font-weight:600; margin:18px 0 8px;">랜딩 페이지</p>
   <ol start="6">
+    <li><b>전면 한/영 병기</b>가 읽히는지. 모든 줄이 두 번 나와 길이가 두 배입니다.</li>
+    <li>랜딩은 <b>「slip builder」</b>를 팔고 앱은 <b>「정직한 컨센서스」</b>를
+        팝니다. 같은 것을 말해야 합니까?</li>
+  </ol>
+
+  <p style="color:var(--ink); font-weight:600; margin:18px 0 8px;">사업성</p>
+  <ol start="8">
     <li><b>"예측 우위를 주장하지 않는다"</b>가 지킬 만한 포지션입니까?
         경쟁 앱이 "AI 적중률 90%"를 파는 시장에서 정직함이 팔립니까?</li>
     <li><b>무료 티어가 너무 관대합니까?</b> 첫 달에 돈 없이 슬립 70개를
