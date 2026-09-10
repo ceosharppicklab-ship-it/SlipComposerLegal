@@ -1,85 +1,330 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SlipComposer Legal</title>
+<title>SlipComposer — Sports stats & slip builder</title>
+<meta name="description" content="SlipComposer turns live sports-betting market odds into clear predictions and lets you build and track practice slips — for entertainment and information only. Not a betting operator.">
+<meta property="og:title" content="SlipComposer — Sports stats & slip builder">
+<meta property="og:description" content="Market-consensus predictions, a multi-leg slip builder, and bookmaker comparison — for entertainment, not betting.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23121212'/><text x='50' y='68' font-size='58' text-anchor='middle' fill='%23CCFF00' font-family='sans-serif' font-weight='bold'>S</text></svg>">
 <style>
-  :root {
-    --ground: #faf9f6;
-    --surface: #ffffff;
-    --ink: #1b1b1a;
-    --muted: #6a6a64;
-    --rule: #e7e5df;
-    --accent: #4f7a00;
-    --maxw: 44rem;
+  :root{
+    --bg:#0d0d0d; --surface:#1e1e1e; --surface-alt:#2c2c34; --line:#2c2c34;
+    --accent:#ccff00; --on-accent:#10140a; --positive:#4caf50; --caution:#ff9f43;
+    --text:#ffffff; --muted:#b0b0b0; --radius:16px;
+    --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
   }
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      --ground: #101010;
-      --surface: #161614;
-      --ink: #e8e7e2;
-      --muted: #9b9a93;
-      --rule: #2a2a26;
-      --accent: #ccff00;
-    }
-  }
-  :root[data-theme="dark"] {
-    --ground: #101010;
-    --surface: #161614;
-    --ink: #e8e7e2;
-    --muted: #9b9a93;
-    --rule: #2a2a26;
-    --accent: #ccff00;
-  }
-  * { box-sizing: border-box; }
-  body {
-    margin: 0;
-    background: var(--ground);
-    color: var(--ink);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    line-height: 1.6;
-    -webkit-font-smoothing: antialiased;
-  }
-  main { max-width: var(--maxw); margin: 0 auto; padding: 4rem 1.25rem 6rem; }
-  h1 { font-size: 1.9rem; letter-spacing: -0.02em; margin: 0 0 0.5rem; }
-  .lede { color: var(--muted); margin: 0 0 2.5rem; }
-  ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.75rem; }
-  a.doc {
-    display: block;
-    background: var(--surface);
-    border: 1px solid var(--rule);
-    border-radius: 10px;
-    padding: 1rem 1.15rem;
-    text-decoration: none;
-    color: var(--ink);
-    font-weight: 600;
-  }
-  a.doc:hover { border-color: var(--accent); }
-  a.doc span { display: block; font-weight: 400; font-size: 0.9rem; color: var(--muted); margin-top: 0.15rem; }
-  footer {
-    margin-top: 3rem; padding-top: 1.25rem;
-    border-top: 1px solid var(--rule);
-    color: var(--muted); font-size: 0.85rem;
-  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font);
+       line-height:1.6;-webkit-font-smoothing:antialiased}
+  a{color:var(--accent);text-decoration:none}
+  a:hover{text-decoration:underline}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+  .btn{display:inline-block;background:var(--accent);color:var(--on-accent);
+       font-weight:800;padding:14px 24px;border-radius:999px;border:0;font-size:15px}
+  .btn:hover{text-decoration:none;filter:brightness(1.05)}
+  .btn.ghost{background:transparent;color:var(--text);border:1px solid var(--line)}
+  .muted{color:var(--muted)}
+  .pill{display:inline-flex;align-items:center;gap:8px;background:var(--surface);
+        border:1px solid var(--line);color:var(--muted);border-radius:999px;
+        padding:6px 14px;font-size:13px}
+
+  /* header */
+  header{position:sticky;top:0;z-index:10;background:rgba(13,13,13,.85);
+         backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .nav{display:flex;align-items:center;justify-content:space-between;height:64px}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:18px}
+  .logo{width:32px;height:32px;border-radius:9px;background:var(--surface);
+        display:grid;place-items:center;color:var(--accent);font-weight:900;
+        border:1px solid var(--line)}
+  .nav-links{display:flex;gap:22px;align-items:center}
+  .nav-links a{color:var(--muted);font-size:14px}
+  .nav-links a:hover{color:var(--text);text-decoration:none}
+  @media(max-width:640px){.nav-links a:not(.btn){display:none}}
+
+  /* hero */
+  .hero{position:relative;overflow:hidden;padding:72px 0 40px}
+  .hero::before{content:"";position:absolute;inset:-40% 30% auto -10%;height:520px;
+    background:radial-gradient(600px 300px at 20% 20%,rgba(204,255,0,.16),transparent 70%);
+    pointer-events:none}
+  .hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:40px;align-items:center}
+  @media(max-width:820px){.hero-grid{grid-template-columns:1fr;text-align:center}}
+  h1{font-size:clamp(32px,5vw,52px);line-height:1.1;margin:16px 0 12px;font-weight:900;
+     letter-spacing:-.5px}
+  h1 .hl{color:var(--accent)}
+  .lead{font-size:18px;color:var(--muted);max-width:48ch;margin:0 0 24px}
+  @media(max-width:820px){.lead{margin-left:auto;margin-right:auto}}
+  .cta-row{display:flex;gap:12px;flex-wrap:wrap}
+  @media(max-width:820px){.cta-row{justify-content:center}}
+
+  /* phone */
+  .phone{width:min(300px,80vw);margin:0 auto;border:10px solid #000;border-radius:40px;
+         background:#000;box-shadow:0 30px 80px rgba(0,0,0,.6);overflow:hidden}
+  .phone img{display:block;width:100%;height:auto}
+
+  /* sections */
+  section{padding:56px 0}
+  .eyebrow{color:var(--accent);font-weight:700;font-size:13px;letter-spacing:.12em;
+           text-transform:uppercase}
+  h2{font-size:clamp(24px,3.5vw,34px);margin:8px 0 8px;font-weight:800;letter-spacing:-.3px}
+  .section-sub{color:var(--muted);max-width:60ch;margin:0 0 28px}
+
+  .features{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+  @media(max-width:640px){.features{grid-template-columns:1fr}}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+        padding:22px}
+  .card .ic{width:44px;height:44px;border-radius:12px;background:rgba(204,255,0,.12);
+     display:grid;place-items:center;font-size:22px;margin-bottom:14px}
+  .card h3{margin:0 0 6px;font-size:18px}
+  .card p{margin:0;color:var(--muted);font-size:14px}
+
+  /* shots */
+  .shots{display:flex;gap:18px;overflow-x:auto;padding:6px 2px 16px;scroll-snap-type:x mandatory}
+  .shot{flex:0 0 auto;width:230px;scroll-snap-align:center}
+  .shot .frame{border:8px solid #000;border-radius:28px;overflow:hidden;background:#000;
+        box-shadow:0 16px 40px rgba(0,0,0,.5)}
+  .shot img{display:block;width:100%;height:auto}
+  .shot .cap{color:var(--muted);font-size:13px;text-align:center;margin-top:10px}
+
+  /* compliance band */
+  .band{background:var(--surface);border-top:1px solid var(--line);
+        border-bottom:1px solid var(--line)}
+  .band .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  @media(max-width:720px){.band .grid{grid-template-columns:1fr}}
+  .fact{display:flex;gap:12px;align-items:flex-start}
+  .fact .dot{color:var(--accent);font-weight:900;font-size:18px;line-height:1.5}
+  .fact b{display:block}
+  .fact span{color:var(--muted);font-size:14px}
+
+  /* footer */
+  footer{border-top:1px solid var(--line);padding:36px 0 48px;color:var(--muted);font-size:14px}
+  .foot-top{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:20px}
+  .foot-links{display:flex;gap:20px;flex-wrap:wrap}
+  .foot-links a{color:var(--muted)}
+  .disclaimer{font-size:12.5px;color:var(--muted);border-top:1px solid var(--line);
+    padding-top:18px;line-height:1.7}
+
+  /* launch status */
+  .ribbon{background:linear-gradient(90deg,rgba(204,255,0,.16),rgba(204,255,0,.05));
+    border-bottom:1px solid var(--line);color:var(--text);font-size:13.5px;
+    text-align:center;padding:9px 16px}
+  .ribbon b{color:var(--accent)}
+  .status{display:inline-flex;align-items:center;gap:9px;background:rgba(204,255,0,.10);
+    border:1px solid rgba(204,255,0,.45);color:var(--accent);border-radius:999px;
+    padding:7px 16px;font-size:13px;font-weight:700;margin-bottom:14px}
+  .status .live{width:9px;height:9px;border-radius:50%;background:var(--accent);
+    box-shadow:0 0 0 0 rgba(204,255,0,.6);animation:pulse 1.8s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(204,255,0,.55)}
+    70%{box-shadow:0 0 0 10px rgba(204,255,0,0)}100%{box-shadow:0 0 0 0 rgba(204,255,0,0)}}
+  .timeline{display:flex;gap:0;justify-content:center;flex-wrap:wrap;margin:22px 0 6px}
+  .step{display:flex;align-items:center;gap:10px;padding:0 6px}
+  .step .mk{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;
+    font-size:13px;font-weight:900;flex:0 0 auto}
+  .step.done .mk{background:var(--accent);color:var(--on-accent)}
+  .step.now .mk{background:transparent;color:var(--accent);border:2px solid var(--accent)}
+  .step.todo .mk{background:var(--surface-alt);color:var(--muted)}
+  .step .lbl{font-size:13px}
+  .step.todo .lbl{color:var(--muted)}
+  .step .bar{width:34px;height:2px;background:var(--surface-alt);margin:0 4px}
+  @media(max-width:640px){.step .bar{display:none}.timeline{gap:10px}}
 </style>
 </head>
 <body>
-<main>
-  <h1>SlipComposer</h1>
-  <p class="lede">Legal documents for the SlipComposer app.</p>
-  <ul>
-    <li>
-      <a class="doc" href="privacy.html">Privacy Policy
-        <span>What the app collects, how it is used, and your choices.</span>
-      </a>
-    </li>
-  </ul>
-  <footer>
-    Entertainment and information only. SlipComposer is not a betting operator,
-    does not accept wagers, and holds no funds. Contact:
-    ceo.sharppicklab@gmail.com
-  </footer>
-</main>
+
+<div class="ribbon">🚀 <b>Now in App Store review</b> — launching soon on iOS · <b>App Store 심사 진행 중</b></div>
+
+<header>
+  <div class="wrap nav">
+    <div class="brand"><span class="logo">S</span> SlipComposer</div>
+    <nav class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#screens">Screens</a>
+      <a href="#responsible">Responsible play</a>
+      <a class="btn" href="#get">Get the app</a>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="status"><span class="live"></span> In App Store review · Coming soon</span>
+      <h1>Sports stats &amp; a smarter <span class="hl">slip builder</span>.</h1>
+      <p class="lead">
+        SlipComposer turns live sports-betting market odds into clear,
+        at-a-glance predictions and lets you build and track practice slips —
+        for entertainment and information only.
+      </p>
+      <span class="pill" style="margin-bottom:20px">📊 Entertainment &amp; information only — not a betting operator</span>
+      <div class="cta-row">
+        <a class="btn" href="#get">Coming soon to the App Store</a>
+        <a class="btn ghost" href="#features">See what it does</a>
+      </div>
+    </div>
+    <div>
+      <div class="phone"><img src="screenshots/01-predictions.png"
+        alt="SlipComposer predictions feed" loading="eager"></div>
+    </div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="wrap">
+    <span class="eyebrow">What it does</span>
+    <h2>From market odds to a clear read</h2>
+    <p class="section-sub">Every number is derived from real bookmaker markets and
+      shown as an implied chance — no hype, no guarantees.</p>
+    <div class="features">
+      <div class="card">
+        <div class="ic">🎯</div>
+        <h3>Market-consensus predictions</h3>
+        <p>De-vigged odds show the implied chance for each outcome across markets —
+          match winner, over/under, both teams to score, double chance.</p>
+      </div>
+      <div class="card">
+        <div class="ic">🧩</div>
+        <h3>Slip builder</h3>
+        <p>Assemble a multi-leg practice slip by risk level and see the combined
+          implied chance. Save slips and track hits and misses over time.</p>
+      </div>
+      <div class="card">
+        <div class="ic">⚖️</div>
+        <h3>Compare bookmakers</h3>
+        <p>See odds across books and how a line has moved, so you understand where
+          the market consensus sits.</p>
+      </div>
+      <div class="card">
+        <div class="ic">⚽</div>
+        <h3>Multi-sport</h3>
+        <p>Football today, with more sports lighting up as data becomes available.
+          Follow teams &amp; leagues and filter your feed.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SCREENS -->
+<section id="screens" style="padding-top:8px">
+  <div class="wrap">
+    <span class="eyebrow">A look inside</span>
+    <h2>Designed to be read at a glance</h2>
+    <p class="section-sub">A clean, dark interface built for quick scanning.</p>
+    <div class="shots">
+      <figure class="shot" style="margin:0">
+        <div class="frame"><img src="screenshots/01-predictions.png" alt="Predictions" loading="lazy"></div>
+        <figcaption class="cap">Predictions feed</figcaption>
+      </figure>
+      <figure class="shot" style="margin:0">
+        <div class="frame"><img src="screenshots/02-match-detail.png" alt="Match detail" loading="lazy"></div>
+        <figcaption class="cap">Match detail &amp; odds</figcaption>
+      </figure>
+      <figure class="shot" style="margin:0">
+        <div class="frame"><img src="screenshots/03-betwizard.png" alt="Slip builder" loading="lazy"></div>
+        <figcaption class="cap">Slip builder</figcaption>
+      </figure>
+      <figure class="shot" style="margin:0">
+        <div class="frame"><img src="screenshots/03-betwizard-result.png" alt="Slip result" loading="lazy"></div>
+        <figcaption class="cap">Generated slip</figcaption>
+      </figure>
+      <figure class="shot" style="margin:0">
+        <div class="frame"><img src="screenshots/04-my-slips.png" alt="My slips" loading="lazy"></div>
+        <figcaption class="cap">My Slips &amp; tracking</figcaption>
+      </figure>
+      <figure class="shot" style="margin:0">
+        <div class="frame"><img src="screenshots/05-responsible-gaming.png" alt="Responsible gaming" loading="lazy"></div>
+        <figcaption class="cap">Responsible play</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- COMPLIANCE / RESPONSIBLE -->
+<div class="band" id="responsible">
+  <section class="wrap">
+    <span class="eyebrow">Important</span>
+    <h2>Entertainment, not wagering</h2>
+    <p class="section-sub">SlipComposer is a statistics and information app. It is
+      designed for adults and takes responsible play seriously.</p>
+    <div class="grid">
+      <div class="fact"><span class="dot">•</span><div>
+        <b>Not a betting operator</b>
+        <span>The app does not accept wagers, place bets, or handle real money.</span>
+      </div></div>
+      <div class="fact"><span class="dot">•</span><div>
+        <b>Virtual coins only</b>
+        <span>In-app coins have no monetary value and cannot be cashed out.</span>
+      </div></div>
+      <div class="fact"><span class="dot">•</span><div>
+        <b>No guaranteed outcomes</b>
+        <span>Predictions are estimates from public odds — not advice, not certainties.</span>
+      </div></div>
+      <div class="fact"><span class="dot">•</span><div>
+        <b>Adults only</b>
+        <span>You must be of legal age in your jurisdiction to use the app.</span>
+      </div></div>
+      <div class="fact"><span class="dot">•</span><div>
+        <b>Play responsibly</b>
+        <span>If betting stops being fun, seek support — e.g. BeGambleAware, NCPG (1-800-522-4700).</span>
+      </div></div>
+      <div class="fact"><span class="dot">•</span><div>
+        <b>Your data, your control</b>
+        <span>Sign-in is optional; you can delete your account and data anytime.</span>
+      </div></div>
+    </div>
+  </section>
+</div>
+
+<!-- GET -->
+<section id="get" style="text-align:center">
+  <div class="wrap">
+    <span class="status"><span class="live"></span> In App Store review · Coming soon</span>
+    <h2>Launching soon on the App Store</h2>
+    <p class="section-sub" style="margin-left:auto;margin-right:auto">
+      The app is built and submitted — currently in Apple's App Store review.
+      iOS launch is imminent. <b style="color:var(--text)">App Store 심사 진행 중 · 출시 임박.</b></p>
+    <div class="timeline">
+      <div class="step done"><span class="mk">✓</span><span class="lbl">Built</span></div>
+      <span class="bar"></span>
+      <div class="step done"><span class="mk">✓</span><span class="lbl">Submitted</span></div>
+      <span class="bar"></span>
+      <div class="step now"><span class="mk">●</span><span class="lbl">In App Store review</span></div>
+      <span class="bar"></span>
+      <div class="step todo"><span class="mk">4</span><span class="lbl">Launch</span></div>
+    </div>
+    <div class="cta-row" style="justify-content:center;margin-top:18px">
+      <span class="pill">🍎 App Store — coming soon</span>
+      <a class="btn ghost" href="mailto:ceo.sharppicklab@gmail.com?subject=SlipComposer%20launch%20updates">Get launch updates</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-top">
+      <div class="brand"><span class="logo">S</span> SlipComposer</div>
+      <div class="foot-links">
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="terms.html">Terms of Service</a>
+        <a href="mailto:ceo.sharppicklab@gmail.com">Support</a>
+      </div>
+    </div>
+    <p class="disclaimer">
+      SlipComposer provides statistical and market-consensus information about
+      sporting events for entertainment and informational purposes only. It is
+      not a gambling service, does not accept or place bets, does not handle real
+      money, and does not provide financial, investment, or betting advice.
+      "Trust"/implied-chance figures reflect de-vigged bookmaker consensus, not a
+      predictive edge, and no outcome is guaranteed. Virtual coins are an in-app
+      item with no cash value. You are responsible for complying with the laws of
+      your jurisdiction. © <span id="yr"></span> SlipComposer.
+    </p>
+  </div>
+</footer>
+<script>document.getElementById('yr').textContent=new Date().getFullYear();</script>
 </body>
 </html>
