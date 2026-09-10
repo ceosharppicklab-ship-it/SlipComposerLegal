@@ -1,0 +1,1646 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SlipComposer — 화면 · 플로우 명세</title>
+<meta name="description" content="SlipComposer iOS 앱의 전체 화면과 사용자 흐름. UX/UI 리뷰를 받기 위한 구조 명세.">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@500;700;900&family=IBM+Plex+Mono:wght@400;600&family=Noto+Sans+KR:wght@400;500;700&display=swap">
+<style>
+  :root {
+    --paper:     #F1F2EC;
+    --panel:     #FFFFFF;
+    --panel-sub: #F7F8F2;
+    --ink:       #14160D;
+    --muted:     #61654F;
+    --faint:     #8B8F79;
+    --rule:      #DBDDD0;
+    --rule-2:    #C0C3B0;
+    --accent:    #556B00;
+    --accent-fl: #CCFF00;
+    --gate:      #8A5A00;
+    --gate-bg:   #FBF1DF;
+    --flag:      #B22B2B;
+    --flag-bg:   #FBEBEB;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper:     #0C0E09;
+      --panel:     #15180E;
+      --panel-sub: #1B1E13;
+      --ink:       #EBEDE1;
+      --muted:     #9B9F88;
+      --faint:     #737763;
+      --rule:      #262A1B;
+      --rule-2:    #383D28;
+      --accent:    #CCFF00;
+      --accent-fl: #CCFF00;
+      --gate:      #E8A64A;
+      --gate-bg:   #2A2011;
+      --flag:      #FF7373;
+      --flag-bg:   #2B1414;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper:     #0C0E09;
+    --panel:     #15180E;
+    --panel-sub: #1B1E13;
+    --ink:       #EBEDE1;
+    --muted:     #9B9F88;
+    --faint:     #737763;
+    --rule:      #262A1B;
+    --rule-2:    #383D28;
+    --accent:    #CCFF00;
+    --accent-fl: #CCFF00;
+    --gate:      #E8A64A;
+    --gate-bg:   #2A2011;
+    --flag:      #FF7373;
+    --flag-bg:   #2B1414;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--paper); color: var(--ink);
+    font-family: "Noto Sans KR", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", sans-serif;
+    font-size: 15px; line-height: 1.65; -webkit-text-size-adjust: 100%;
+  }
+  .wrap { max-width: 62rem; margin: 0 auto; padding: 0 20px; }
+  @media (max-width: 480px) { .wrap { padding: 0 16px; } }
+
+  h1, h2, h3 { font-family: "Gothic A1", "Noto Sans KR", sans-serif; text-wrap: balance; }
+  code, .mono { font-family: "IBM Plex Mono", ui-monospace, monospace; }
+
+  /* masthead ---------------------------------------------------------- */
+  header.mast { padding-block: 40px 8px; }
+  .eyebrow {
+    font-family: "IBM Plex Mono", monospace; font-size: 11px;
+    letter-spacing: .16em; text-transform: uppercase; color: var(--faint);
+    margin: 0 0 10px;
+  }
+  h1 { font-weight: 900; font-size: clamp(30px, 8vw, 50px); line-height: 1.06;
+       letter-spacing: -.03em; margin: 0 0 16px; }
+  .lede { font-size: 17px; color: var(--muted); margin: 0; max-width: 34rem; }
+
+  /* generic blocks ---------------------------------------------------- */
+  .note {
+    background: var(--panel); border: 1px solid var(--rule);
+    border-left: 3px solid var(--accent-fl);
+    padding: 16px 18px; margin: 28px 0;
+  }
+  .note h3 { font-size: 14px; font-weight: 700; margin: 0 0 8px; }
+  .note p  { margin: 0 0 8px; font-size: 14px; color: var(--muted); }
+  .note p:last-child { margin-bottom: 0; }
+  .note ul { margin: 0; padding-left: 1.1em; font-size: 14px; color: var(--muted); }
+  .note li { margin-bottom: 5px; }
+
+  .known { border-left-color: var(--flag); }
+
+  h2.sec {
+    font-weight: 900; font-size: clamp(20px, 4.5vw, 26px); letter-spacing: -.02em;
+    margin: 0 0 6px;
+  }
+  .sec-wrap { margin-top: 56px; border-top: 2px dashed var(--rule-2); padding-top: 22px; }
+  .sec-kicker {
+    font-family: "IBM Plex Mono", monospace; font-size: 11px; font-weight: 600;
+    letter-spacing: .14em; text-transform: uppercase; color: var(--accent);
+    margin: 0 0 8px;
+  }
+  .sec-lede { color: var(--muted); font-size: 15px; margin: 0 0 4px; max-width: 40rem; }
+
+  /* flow strip -------------------------------------------------------- */
+  .flow { overflow-x: auto; margin: 22px 0 30px; padding-bottom: 6px; }
+  .flow ol {
+    display: flex; align-items: center; gap: 0; list-style: none;
+    margin: 0; padding: 0; width: max-content;
+  }
+  .flow li { display: flex; align-items: center; }
+  .flow .node {
+    font-family: "IBM Plex Mono", monospace; font-size: 11.5px; font-weight: 600;
+    background: var(--panel); border: 1px solid var(--rule-2);
+    padding: 7px 11px; white-space: nowrap;
+  }
+  .flow .node.start { background: var(--accent-fl); color: #10140A; border-color: var(--accent-fl); }
+  .flow .node.end   { border-style: double; border-width: 3px; }
+  .flow .arrow { color: var(--faint); padding: 0 8px; font-size: 13px; flex: none; }
+  .flow .branch { color: var(--gate); font-size: 11px; padding: 0 8px; white-space: nowrap; }
+
+  /* app map ----------------------------------------------------------- */
+  .map { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+         gap: 10px; margin: 24px 0 8px; }
+  .map div {
+    background: var(--panel); border: 1px solid var(--rule); padding: 12px 14px;
+  }
+  .map b { display: block; font-size: 14px; font-weight: 700; margin-bottom: 3px; }
+  .map span { font-size: 12.5px; color: var(--muted); }
+  .map .n {
+    font-family: "IBM Plex Mono", monospace; font-size: 10px; color: var(--faint);
+    display: block; margin-bottom: 6px; letter-spacing: .1em;
+  }
+
+  /* screen card ------------------------------------------------------- */
+  .screen {
+    display: grid; grid-template-columns: 268px 1fr; gap: 26px;
+    margin: 34px 0; align-items: start;
+  }
+  @media (max-width: 720px) { .screen { grid-template-columns: 1fr; gap: 18px; } }
+
+  .spec h3 {
+    font-size: 18px; font-weight: 800; margin: 0 0 2px; letter-spacing: -.01em;
+  }
+  .spec .path {
+    font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--faint);
+    margin: 0 0 12px; letter-spacing: .02em;
+  }
+  .spec dl { margin: 0; }
+  .spec dt {
+    font-family: "IBM Plex Mono", monospace; font-size: 10.5px; font-weight: 600;
+    letter-spacing: .12em; text-transform: uppercase; color: var(--faint);
+    margin-top: 14px;
+  }
+  .spec dd { margin: 3px 0 0; font-size: 14px; color: var(--muted); }
+  .spec dd ul { margin: 3px 0 0; padding-left: 1.05em; }
+  .spec dd li { margin-bottom: 3px; }
+  .spec dd b { color: var(--ink); font-weight: 600; }
+
+  .ask {
+    margin-top: 16px; background: var(--panel-sub);
+    border: 1px solid var(--rule); border-left: 3px solid var(--accent);
+    padding: 12px 14px;
+  }
+  .ask p {
+    font-family: "IBM Plex Mono", monospace; font-size: 10.5px; font-weight: 600;
+    letter-spacing: .12em; text-transform: uppercase; color: var(--accent);
+    margin: 0 0 6px;
+  }
+  .ask ul { margin: 0; padding-left: 1.05em; font-size: 14px; }
+  .ask li { margin-bottom: 6px; }
+  .ask li:last-child { margin-bottom: 0; }
+
+  .pill {
+    display: inline-block; font-family: "IBM Plex Mono", monospace;
+    font-size: 10px; font-weight: 600; letter-spacing: .06em;
+    padding: 1px 5px; border-radius: 3px; vertical-align: 2px; margin-left: 5px;
+  }
+  .pill.pro  { color: var(--gate); background: var(--gate-bg); border: 1px solid var(--gate); }
+  .pill.paid { color: var(--flag); background: var(--flag-bg); border: 1px solid var(--flag); }
+
+  /* ---- device wireframe (the app's own tokens) ----------------------- */
+  .dev {
+    background: #121212; color: #FFFFFF; border: 1px solid #2C2C34;
+    border-radius: 20px; overflow: hidden; font-size: 11px; line-height: 1.5;
+    max-width: 100%; position: sticky; top: 16px;
+  }
+  @media (max-width: 720px) { .dev { position: static; max-width: 300px; } }
+  .dev * { box-sizing: border-box; }
+  .dev-cap {
+    font-family: "IBM Plex Mono", monospace; font-size: 9.5px; color: #6E7260;
+    text-align: center; padding: 5px 0 0; letter-spacing: .08em;
+  }
+  .dev-bar {
+    padding: 11px 12px; text-align: center; font-weight: 700; font-size: 12px;
+    border-bottom: 1px solid #2C2C34; color: #FFF;
+  }
+  .dev-bar .lead, .dev-bar .trail {
+    float: left; color: #B0B0B0; font-weight: 400; font-size: 11px;
+  }
+  .dev-bar .trail { float: right; }
+  .dev-tabs { display: flex; gap: 12px; padding: 8px 12px 0; overflow: hidden;
+              border-bottom: 1px solid #2C2C34; font-size: 10.5px; }
+  .dev-tabs span { padding-bottom: 7px; color: #B0B0B0; white-space: nowrap; }
+  .dev-tabs span.on { color: #CCFF00; font-weight: 700; box-shadow: inset 0 -2px 0 #CCFF00; }
+  .dev-body { padding: 11px 12px 13px; display: flex; flex-direction: column; gap: 8px; }
+  .d-h { font-weight: 700; font-size: 12px; color: #FFF; }
+  .d-m { color: #B0B0B0; font-size: 10.5px; }
+  .d-card {
+    background: #1E1E1E; border: 1px solid #2C2C34; border-radius: 8px;
+    padding: 8px 9px; display: flex; flex-direction: column; gap: 3px;
+  }
+  .d-card.lime { border-color: #CCFF00; }
+  .d-pick { color: #CCFF00; font-weight: 700; }
+  .d-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+  .d-chip {
+    border: 1px solid #2C2C34; border-radius: 999px; padding: 3px 8px;
+    color: #B0B0B0; font-size: 10px; white-space: nowrap;
+  }
+  .d-chip.on { background: #CCFF00; color: #10140A; border-color: #CCFF00; font-weight: 700; }
+  .d-chip.locked { color: #6E7260; border-style: dashed; }
+  .d-btn {
+    background: #CCFF00; color: #10140A; font-weight: 700; text-align: center;
+    border-radius: 8px; padding: 9px 0; font-size: 11px;
+  }
+  .d-btn.ghost { background: transparent; color: #FFF; border: 1px solid #4A4F3A; font-weight: 500; }
+  .d-btn.off { background: #2C2C34; color: #6E7260; }
+  .d-row { display: flex; justify-content: space-between; gap: 8px; }
+  .d-row .v { color: #FFF; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .d-nav {
+    display: flex; border-top: 1px solid #2C2C34; padding: 7px 4px 9px;
+    font-size: 9px; color: #6E7260; text-align: center;
+  }
+  .d-nav span { flex: 1; }
+  .d-nav span.on { color: #CCFF00; font-weight: 700; }
+  .d-slider { height: 3px; background: #2C2C34; border-radius: 2px; position: relative; margin: 7px 0; }
+  .d-slider i { position: absolute; left: 0; top: 0; height: 100%; background: #CCFF00; border-radius: 2px; }
+  .d-slider b { position: absolute; top: -4px; width: 11px; height: 11px; border-radius: 50%;
+                background: #CCFF00; margin-left: -5px; }
+  .d-lock { color: #FF9F43; font-size: 10px; }
+  .d-prog { height: 3px; background: #2C2C34; }
+  .d-prog i { display: block; height: 100%; background: #CCFF00; }
+  .d-sheet {
+    border-top: 1px solid #2C2C34; background: #1A1A1A;
+    border-radius: 12px 12px 0 0; padding: 9px 12px 12px;
+    display: flex; flex-direction: column; gap: 7px;
+  }
+  .d-grab { width: 30px; height: 3px; background: #2C2C34; border-radius: 2px; margin: 0 auto 4px; }
+  .d-ad { border: 1px dashed #4A4F3A; color: #6E7260; text-align: center;
+          font-size: 9.5px; padding: 7px 0; border-radius: 6px; }
+
+  table.matrix {
+    width: 100%; border-collapse: collapse; font-size: 13px; margin: 18px 0 8px;
+  }
+  .scroll-x { overflow-x: auto; }
+  table.matrix th, table.matrix td {
+    border: 1px solid var(--rule); padding: 7px 10px; text-align: left;
+    vertical-align: top;
+  }
+  table.matrix th {
+    background: var(--panel-sub); font-weight: 700; font-size: 12px;
+    white-space: nowrap;
+  }
+  table.matrix td { color: var(--muted); }
+  table.matrix td b { color: var(--ink); }
+
+  footer.end {
+    margin: 64px 0 56px; border-top: 2px dashed var(--rule-2); padding-top: 24px;
+    font-size: 14px; color: var(--muted);
+  }
+  footer.end h2 { font-size: 20px; font-weight: 800; color: var(--ink); margin: 0 0 10px; }
+  footer.end ol { padding-left: 1.2em; margin: 0 0 18px; }
+  footer.end li { margin-bottom: 7px; }
+  footer.end .fine { font-size: 12px; color: var(--faint); margin-top: 20px; }
+  a { color: var(--accent); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="mast">
+  <p class="eyebrow">SlipComposer · iOS 1.0 · 심사 제출 직전</p>
+  <h1>화면 · 플로우 명세</h1>
+  <p class="lede">
+    앱 전체 화면 22개와 그 사이의 흐름입니다. UX·UI 평가를 받기 위해
+    코드에서 직접 뽑아 정리했습니다.
+  </p>
+</header>
+
+<div class="note">
+  <h3>이 문서를 읽는 법</h3>
+  <ul>
+    <li>왼쪽 검은 패널은 <b>스크린샷이 아니라 구조도</b>입니다. 앱의 실제 색
+        (배경 <code>#121212</code>, 포인트 <code>#CCFF00</code>)과 실제 한국어
+        문구를 쓰되, 간격·타이포·아이콘은 정확하지 않습니다.</li>
+    <li><span class="pill pro">PRO</span> 는 유료 플랜에서만 열리는 요소,
+        <span class="pill paid">유료</span> 는 다이아(인앱 재화)를 소비하는 동작입니다.</li>
+    <li>화면마다 <b>리뷰 포인트</b>가 붙어 있습니다. 그게 저희가 실제로 답을
+        듣고 싶은 질문입니다. 다른 게 더 눈에 띄면 그쪽을 말씀해 주셔도 좋습니다.</li>
+  </ul>
+</div>
+
+<div class="note">
+  <h3>앱이 하는 일</h3>
+  <p>
+    여러 북메이커의 배당을 모아 <b>시장 컨센서스</b>를 계산하고, 사용자가 고른
+    조건에 맞는 경기들을 묶어 <b>멀티레그 슬립</b>을 구성해 줍니다. 저장한 슬립은
+    경기가 끝나면 자동으로 적중·실패가 채점됩니다.
+  </p>
+  <p>
+    <b>베팅을 받지 않고 돈을 보관하지 않습니다.</b> 앱 안에서 실제 베팅을 걸 수
+    있는 경로는 없습니다. 수익은 구독과 다이아 판매에서 나옵니다.
+    종목은 축구·농구·야구·NHL·NFL·e스포츠·핸드볼입니다.
+  </p>
+</div>
+
+<div class="note known">
+  <h3>이미 알고 있는 문제 — 여기에 시간 쓰지 않으셔도 됩니다</h3>
+  <ul>
+    <li><b>런치 이미지</b>가 아직 1×1 플레이스홀더입니다. 실행 시 검은 화면만 뜹니다.</li>
+    <li><b>프리셋 카드 레이아웃</b>이 정리되지 않았습니다 — 조건 요약이 길어지면 줄이 깨집니다.</li>
+    <li><b>독일어 배당 표기</b>가 소수점 구분자를 섞어 씁니다 (<code>1.85</code>와 <code>Über 2,5</code>).</li>
+    <li>아이콘은 1차 버전입니다. 홈 화면 크기에서 종목 구분이 약하다는 건 알고 있습니다.</li>
+  </ul>
+</div>
+
+<div class="note">
+  <h3>구조 — 하단 탭 5개 + 진입 게이트 3개</h3>
+  <div class="map">
+    <div><span class="n">GATE</span><b>연령 · 동의 · 온보딩</b><span>첫 실행에만. 순서가 고정입니다.</span></div>
+    <div><span class="n">TAB 1</span><b>예측</b><span>날짜별 경기 목록과 컨센서스 픽</span></div>
+    <div><span class="n">TAB 2</span><b>컴포저</b><span>슬립을 만드는 곳. 탭 안에 다시 탭 2개</span></div>
+    <div><span class="n">TAB 3</span><b>프리미엄</b><span>구독 · 다이아 · 슬롯 판매</span></div>
+    <div><span class="n">TAB 4</span><b>내 슬립</b><span>저장한 슬립과 채점 결과</span></div>
+    <div><span class="n">TAB 5</span><b>프로필</b><span>계정 · 프리셋 · 설정 · 법적 고지</span></div>
+  </div>
+</div>
+
+
+<!-- ================================================================== -->
+<section class="sec-wrap">
+  <p class="sec-kicker">Flow 01</p>
+  <h2 class="sec">첫 실행 — 게이트 세 개</h2>
+  <p class="sec-lede">
+    순서가 고정입니다. 18세 확인은 앱을 쓰기 위한 조건이고, 분석 동의는 아니며,
+    기능 설명은 둘 다 아닙니다. 그래서 이 순서입니다.
+  </p>
+
+  <div class="flow">
+    <ol>
+      <li><span class="node start">앱 실행</span></li>
+      <li><span class="arrow">→</span><span class="node">연령 확인</span></li>
+      <li><span class="arrow">→</span><span class="node">분석 동의</span></li>
+      <li><span class="arrow">→</span><span class="node">온보딩 3장</span></li>
+      <li><span class="arrow">→</span><span class="node end">컴포저 탭</span></li>
+    </ol>
+  </div>
+
+  <div class="screen">
+    <div>
+      <div class="dev">
+        <div class="dev-cap">01 · AGE GATE</div>
+        <div class="dev-body" style="gap:11px; padding:26px 14px;">
+          <div class="d-h" style="font-size:14px;">성인용, 오락 목적</div>
+          <div class="d-m">SlipComposer는 오락 목적으로 스포츠 통계와 시장
+            컨센서스 정보를 보여줍니다.</div>
+          <div class="d-m">만 18세 이상(또는 거주지의 성년 연령)이어야 계속할 수
+            있습니다.</div>
+          <div class="d-btn" style="margin-top:8px;">만 18세 이상입니다 — 계속하기</div>
+          <div class="d-m" style="text-align:center;">만 18세 미만이면 앱을 종료해 주세요.</div>
+        </div>
+      </div>
+    </div>
+    <div class="spec">
+      <h3>연령 확인</h3>
+      <p class="path">age_gate.dart · 첫 실행에만, 이후 저장</p>
+      <dl>
+        <dt>목적</dt>
+        <dd>App Store 심사 필수. 이 화면보다 먼저 보이는 앱 화면이 없어야 합니다.</dd>
+        <dt>동작</dt>
+        <dd>통과 버튼 하나뿐. <b>거부 버튼이 없고</b> "앱을 종료해 주세요"라는
+            문장만 있습니다.</dd>
+      </dl>
+      <div class="ask">
+        <p>리뷰 포인트</p>
+        <ul>
+          <li>버튼이 하나뿐인 게 정직한 설계인지, 아니면 "예"만 있는 동의창처럼
+              읽혀 오히려 신뢰를 깎는지.</li>
+          <li>첫 화면이 법적 문구인 것이 이탈을 만드는지. 대안이 있는지.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen">
+    <div>
+      <div class="dev">
+        <div class="dev-cap">02 · ANALYTICS CONSENT</div>
+        <div class="dev-body" style="gap:11px; padding:26px 14px;">
+          <div class="d-h" style="font-size:14px;">앱 개선에 도움을 주시겠어요?</div>
+          <div class="d-m">허락하시면 익명 사용 데이터를 수집합니다 — 어떤 화면이
+            열리는지 같은 것입니다.</div>
+          <div class="d-m">어느 쪽을 고르셔도 모든 기능은 그대로 쓸 수 있습니다.
+            프로필에서 언제든 바꿀 수 있습니다.</div>
+          <div class="d-btn" style="margin-top:8px;">동의</div>
+          <div class="d-btn ghost">동의 안 함</div>
+        </div>
+      </div>
+    </div>
+    <div class="spec">
+      <h3>분석 동의</h3>
+      <p class="path">analytics_consent_gate.dart</p>
+      <dl>
+        <dt>목적</dt>
+        <dd>Firebase Analytics 옵트인. ATT(추적 허용) 팝업은 <b>쓰지 않습니다</b> —
+            광고 식별자를 읽지 않으므로 필요가 없습니다.</dd>
+        <dt>특징</dt>
+        <dd>두 버튼의 시각적 무게가 다릅니다. 「동의」가 라임 채움,
+            「동의 안 함」이 외곽선입니다.</dd>
+      </dl>
+      <div class="ask">
+        <p>리뷰 포인트</p>
+        <ul>
+          <li>두 버튼의 무게 차이가 <b>다크 패턴으로 읽히는지</b>. 동등하게
+              두는 편이 나은지 — 실제로 저희가 가장 확신이 없는 지점입니다.</li>
+          <li>두 번째 연속 전면 모달입니다. 지금 물을 일인지, 나중에 물을 일인지.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen">
+    <div>
+      <div class="dev">
+        <div class="dev-cap">03 · ONBOARDING (3 pages)</div>
+        <div class="dev-bar"><span class="lead"></span>건너뛰기<span class="trail"></span></div>
+        <div class="dev-body" style="gap:12px; padding:30px 14px 16px;">
+          <div class="d-h" style="font-size:15px;">원하는 배당을 말하세요</div>
+          <div class="d-m">목표를 정하면 컴포저가 그 배당에 닿는 슬립을
+            조건에 맞는 경기들로 조립합니다.</div>
+          <div style="display:flex; gap:5px; justify-content:center; margin-top:14px;">
+            <span style="width:16px;height:4px;background:#CCFF00;border-radius:2px;"></span>
+            <span style="width:5px;height:4px;background:#2C2C34;border-radius:2px;"></span>
+            <span style="width:5px;height:4px;background:#2C2C34;border-radius:2px;"></span>
+          </div>
+          <div class="d-btn" style="margin-top:12px;">다음</div>
+          <div class="d-m" style="text-align:center; font-size:9.5px;">
+            시작 다이아는 저희가 드립니다. 매일 로그인하면 더 모입니다.</div>
+        </div>
+      </div>
+    </div>
+    <div class="spec">
+      <h3>온보딩</h3>
+      <p class="path">onboarding_screen.dart · 3장, 건너뛰기 가능</p>
+      <dl>
+        <dt>3장의 내용</dt>
+        <dd>
+          <ul>
+            <li><b>원하는 배당을 말하세요</b> — 목표 배당에서 슬립이 나온다</li>
+            <li><b>조건만 고르면 됩니다</b> — 종목·위험도·기간</li>
+            <li><b>결과는 자동으로 채점됩니다</b> — 저장한 슬립이 적중/실패로</li>
+          </ul>
+        </dd>
+        <dt>끝난 뒤</dt>
+        <dd>예측 탭이 아니라 <b>컴포저 탭</b>으로 보냅니다. 방금 설명한 것을
+            바로 열어 주기 위해서입니다.</dd>
+      </dl>
+      <div class="ask">
+        <p>리뷰 포인트</p>
+        <ul>
+          <li>게이트 2개를 지난 뒤의 세 번째 전면 화면입니다. 3장이 과한지.</li>
+          <li>"다이아를 드립니다"가 마지막 장 각주로 작게 있습니다. 재화 개념을
+              여기서 처음 만나는데, 이 위치와 크기가 맞는지.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ================================================================== -->
+<section class="sec-wrap">
+  <p class="sec-kicker">Flow 02 · Tab 1</p>
+  <h2 class="sec">예측 — 오늘 뭐가 있나</h2>
+  <p class="sec-lede">
+    앱을 다시 열었을 때 기본으로 보이는 탭입니다. 경기 목록과 각 경기의 컨센서스
+    픽을 보여주고, 탭하면 상세로 들어갑니다.
+  </p>
+
+  <div class="flow">
+    <ol>
+      <li><span class="node start">예측 탭</span></li>
+      <li><span class="arrow">→</span><span class="node">종목 · 날짜 · 마켓 선택</span></li>
+      <li><span class="arrow">→</span><span class="node">경기 카드 탭</span></li>
+      <li><span class="arrow">→</span><span class="node">경기 상세</span></li>
+      <li><span class="branch">├ 예측 탭</span></li>
+      <li><span class="branch">└ 비교 탭 <span class="pill pro">PRO</span></span></li>
+    </ol>
+  </div>
+
+  <div class="screen">
+    <div>
+      <div class="dev">
+        <div class="dev-cap">04 · PREDICTIONS</div>
+        <div class="dev-bar">예측<span class="trail">☆ 정렬</span></div>
+        <div class="dev-tabs">
+          <span class="on">전체</span><span>⚽ 축구</span><span>🏀 농구</span><span>⚾ 야구</span>
+        </div>
+        <div class="dev-body">
+          <div class="d-chips">
+            <span class="d-chip">어제</span><span class="d-chip on">오늘</span>
+            <span class="d-chip">내일</span><span class="d-chip">9/13</span>
+          </div>
+          <div class="d-chips">
+            <span class="d-chip on">경기 승자</span>
+            <span class="d-chip locked">더블 찬스 🔒</span>
+            <span class="d-chip locked">오버/언더 🔒</span>
+          </div>
+          <div class="d-m">전체 리그 ▾ &nbsp;·&nbsp; 리그 / 시간</div>
+          <div class="d-card">
+            <div class="d-m">프리미어리그 · 20:45</div>
+            <div class="d-h">아스날 <span class="d-m">vs</span> 첼시</div>
+            <div class="d-pick">컨센서스 픽: 홈 · 1.85</div>
+            <div class="d-row"><span class="d-m">신뢰도</span><span class="v">62%</span></div>
+          </div>
+          <div class="d-card">
+            <div class="d-m">라리가 · 22:00</div>
+            <div class="d-h">세비야 <span class="d-m">vs</span> 베티스</div>
+            <div class="d-pick">컨센서스 픽: 홈 · 2.10</div>
+            <div class="d-row"><span class="d-m">신뢰도</span><span class="v">55%</span></div>
+          </div>
+          <div class="d-ad">배너 광고 (무료 플랜)</div>
+        </div>
+        <div class="d-nav"><span class="on">예측</span><span>컴포저</span><span>프리미엄</span><span>내 슬립</span><span>프로필</span></div>
+      </div>
+    </div>
+    <div class="spec">
+      <h3>예측 목록</h3>
+      <p class="path">predictions_screen.dart · 하단 탭 1</p>
+      <dl>
+        <dt>한 화면에 있는 필터</dt>
+        <dd>
+          <ul>
+            <li><b>종목 탭</b> — 전체 + 준비된 종목. 준비 안 된 종목은 흐리게 보이되 <b>탭은 됩니다</b></li>
+            <li><b>날짜 칩</b> — 어제부터 앞으로</li>
+            <li><b>마켓 칩</b> — 경기 승자는 무료, 나머지는 <span class="pill pro">PRO</span></li>
+            <li><b>리그 드롭다운</b> — 팔로우한 리그는 ☆</li>
+            <li><b>정렬</b> — 리그순 / 시간순</li>
+          </ul>
+        </dd>
+        <dt>빈 상태</dt>
+        <dd>"이 기간에 배당이 있는 경기가 아직 없습니다" + <b>다음 경기가 있는
+            날짜와 그리로 가는 버튼</b>을 같이 보여줍니다.</dd>
+      </dl>
+      <div class="ask">
+        <p>리뷰 포인트</p>
+        <ul>
+          <li><b>필터가 5종류입니다.</b> 처음 온 사람이 무엇부터 만져야 하는지
+              알 수 있습니까? 줄인다면 무엇을 버리시겠습니까?</li>
+          <li>잠긴 마켓 칩을 <b>보여주고 잠그는 것</b>과 아예 감추는 것 중
+              어느 쪽이 낫습니까?</li>
+          <li>준비 안 된 종목 탭을 흐리게 두되 누를 수는 있게 했습니다.
+              (누르면 "왜 비었는지"를 설명합니다.) 이게 친절입니까, 함정입니까?</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen">
+    <div>
+      <div class="dev">
+        <div class="dev-cap">05 · MATCH DETAIL</div>
+        <div class="dev-bar"><span class="lead">←</span>경기<span class="trail">☆</span></div>
+        <div class="dev-tabs"><span class="on">예측</span><span>비교 🔒</span></div>
+        <div class="dev-body">
+          <div class="d-card lime">
+            <div class="d-m">프리미어리그 · 수 17 9월 20:45</div>
+            <div class="d-h">아스날 vs 첼시</div>
+            <div class="d-pick">홈 · 1.85</div>
+          </div>
+          <div class="d-h">최근 폼 (최근 5경기)</div>
+          <div class="d-card">
+            <div class="d-row"><span class="d-m">전적</span><span class="v">3승 1무 1패</span></div>
+            <div class="d-row"><span class="d-m">평균 득점</span><span class="v">2.1</span></div>
+            <div class="d-row"><span class="d-m">평균 실점</span><span class="v">0.8</span></div>
+          </div>
+          <div class="d-h">경기 전 상대전적</div>
+          <div class="d-card"><div class="d-row"><span class="d-m">맞대결</span><span class="v">6경기</span></div></div>
+          <div class="d-h">시장 일치도</div>
+          <div class="d-card">
+            <div class="d-row"><span class="d-m">일치도</span><span class="v">높음</span></div>
+            <div class="d-m">북메이커 가격이 얼마나 일치하는지. 낮을수록 시장이 불확실합니다.</div>
+          </div>
+          <div class="d-h">비슷한 경기</div>
+          <div class="d-m">배당 프로필이 비슷한 경기 — 예측이 아니라 탐색용입니다.</div>
+        </div>
+      </div>
+    </div>
+    <div class="spec">
+      <h3>경기 상세</h3>
+      <p class="path">match_detail_screen.dart · 탭 2개</p>
+      <dl>
+        <dt>예측 탭 (무료)</dt>
+        <dd>컨센서스 픽 · 최근 폼 · 상대전적 · 시장 일치도 · 비슷한 경기</dd>
+        <dt>비교 탭 <span class="pill pro">PRO</span></dt>
+        <dd>배당 변동(시가 → 최신) · 북메이커별 가격 · 최고가 하이라이트 ·
+            "컨센서스 대비 +N%"</dd>
+        <dt>문구 원칙</dt>
+        <dd>모든 수치에 <b>예측이 아니라는 문장</b>이 붙습니다. "비슷한 경기"에도
+            "예측이 아니라 탐색용"이 달려 있습니다.</dd>
+      </dl>
+      <div class="ask">
+        <p>리뷰 포인트</p>
+        <ul>
+          <li>면책 문구가 카드마다 붙습니다. <b>신뢰를 주는지, 소음인지.</b>
+              법적으로 필요하지만 빈도는 선택입니다.</li>
+          <li>「시장 일치도」와 「신뢰도」가 둘 다 %와 등급으로 나옵니다.
+              사용자가 두 개를 구분할 수 있습니까?</li>
+          <li>Pro 탭을 <b>탭 헤더에 자물쇠로</b> 두었습니다. 눌러야 안내가 나옵니다.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ================================================================== -->
+<section class="sec-wrap">
+  <p class="sec-kicker">Flow 03 · Tab 2 — A</p>
+  <h2 class="sec">컴포저 · 슬립 만들기 — 7단계</h2>
+  <p class="sec-lede">
+    앱의 핵심 기능입니다. 그리고 <b>가장 걱정하는 화면</b>이기도 합니다 —
+    결과를 보기까지 7단계를 지나야 합니다.
+  </p>
+
+  <div class="flow">
+    <ol>
+      <li><span class="node start">컴포저 탭</span></li>
+      <li><span class="arrow">→</span><span class="node">인트로 + 단계 목록</span></li>
+      <li><span class="arrow">→</span><span class="node">1 종목</span></li>
+      <li><span class="branch">└ 바로 생성 ⇢</span></li>
+      <li><span class="node">2 위험</span></li>
+      <li><span class="arrow">→</span><span class="node">3 기간</span></li>
+      <li><span class="arrow">→</span><span class="node">4 레그 수</span></li>
+      <li><span class="arrow">→</span><span class="node">5 팀·리그 <span class="pill pro">PRO</span></span></li>
+      <li><span class="arrow">→</span><span class="node">6 조건 <span class="pill pro">PRO</span></span></li>
+      <li><span class="arrow">→</span><span class="node">7 목표 배당</span></li>
+      <li><span class="arrow">→</span><span class="node end">슬립 결과 <span class="pill paid">유료</span></span></li>
+    </ol>
+  </div>
+
+  <div class="screen">
+    <div>
+      <div class="dev">
+        <div class="dev-cap">06 · COMPOSER HOME</div>
+        <div class="dev-bar">컴포저</div>
+        <div class="dev-tabs"><span class="on">베팅 슬립</span><span>경기 찾기</span></div>
+        <div class="dev-body">
+          <div class="d-h">시장 컨센서스 베팅 슬립</div>
+          <div class="d-m">여러 종목의 시장 컨센서스 선택으로 멀티레그 슬립을
+            구성하세요. 신뢰도는 마진을 제거한 컨센서스를 반영하며,
+            예측 우위를 뜻하지 않습니다.</div>
+          <div class="d-card">
+            <div class="d-m">1 · 종목 선택</div>
+            <div class="d-m">2 · 위험 수준 선택</div>
+            <div class="d-m">3 · 경기 기간 선택</div>
+            <div class="d-m">4 · 조합 경기 수 설정</div>
+            <div class="d-m">5 · 팀 · 리그 선택 <span class="d-lock">Pro</span></div>
+            <div class="d-m">6 · 조건 필터 적용 <span class="d-lock">Pro</span></div>
+            <div class="d-m">7 · 목표 배당 설정</div>
+          </div>
+          <div class="d-btn">베팅 슬립 생성</div>
+          <div class="d-m" style="font-size:9.5px;">생성된 슬립은 결과를 보장하지
+            않으며 오락 목적입니다.</div>
+        </div>
+        <div class="d-nav"><span>예측</span><span class="on">컴포저</span><span>프리미엄</span><span>내 슬립</span><span>프로필</span></div>
+      </div>
+    </div>
+    <div class="spec">
+      <h3>컴포저 홈</h3>
+      <p class="path">composer_screen.dart · 탭 안의 탭 2개</p>
+      <dl>
+        <dt>구조</dt>
+        <dd>하단 탭 안에 다시 상단 탭 2개가 있습니다 —
+            <b>베팅 슬립</b>(조건으로 조립)과 <b>경기 찾기</b>(조건으로 검색).</dd>
+        <dt>이 화면의 역할</dt>
+        <dd>7단계를 <b>미리 다 보여주고</b> 시작합니다. 무엇이 기다리는지
+            숨기지 않으려는 의도입니다.</dd>
+      </dl>
+      <div class="ask">
+        <p>리뷰 포인트</p>
+        <ul>
+          <li>7단계를 미리 나열한 것이 <b>안심을 주는지, 겁을 주는지.</b></li>
+          <li>「베팅 슬립」과 「경기 찾기」의 차이가 탭 이름만으로 전달됩니까?
+              둘 다 "조건으로 경기를 고른다"는 점은 같습니다.</li>
+          <li>하단 탭 → 상단 탭 <b>2단 계층</b>이 맞는 구조입니까?</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen">
+    <div>
+      <div class="dev">
+        <div class="dev-cap">07 · WIZARD STEP 1 / 7</div>
+        <div class="dev-bar"><span class="lead">←</span>7단계 중 1단계</div>
+        <div class="d-prog"><i style="width:14%"></i></div>
+        <div class="dev-body">
+          <div class="d-h">종목</div>
+          <div class="d-chips">
+            <span class="d-chip on">⚽ 축구</span><span class="d-chip">🏀 농구</span>
+            <span class="d-chip">⚾ 야구</span><span class="d-chip">🏒 NHL</span>
+            <span class="d-chip">🏈 NFL</span>
+          </div>
+          <div class="d-card" style="border-color:#CCFF00;">
+            <div class="d-m">바로 만들어 보시겠어요?</div>
+            <div class="d-h" style="font-size:11px;">3경기 · 보통 리스크 · 앞으로 7일</div>
+            <div class="d-btn" style="margin-top:5px;">이 설정으로 바로 생성</div>
+          </div>
+          <div class="d-btn ghost">다음</div>
+        </div>
+      </div>
+      <div class="dev" style="margin-top:12px;">
+        <div class="dev-cap">08 · STEP 3 / 7 — WINDOW</div>
+        <div class="dev-bar"><span class="lead">←</span>7단계 중 3단계</div>
+        <div class="d-prog"><i style="width:43%"></i></div>
+        <div class="dev-body">
+          <div class="d-h">경기 기간</div>
+          <div class="d-m">앞으로 7일 이내 경기</div>
+          <div class="d-slider"><i style="width:22%"></i><b style="left:22%"></b></div>
+          <div class="d-row"><span class="d-m">1일</span><span class="d-m">30일</span></div>
+          <div class="d-btn ghost">다음</div>
+        </div>
+      </div>
+    </div>
+    <div class="spec">
+      <h3>7단계 마법사</h3>
+      <p class="path">composer_flow_screen.dart · 상단 진행 바</p>
+      <dl>
+        <dt>단계</dt>
+        <dd>
+          <ul>
+            <li><b>1 종목</b> — 다중 선택. <b>여기에만 "바로 생성" 단축이 있습니다</b></li>
+            <li><b>2 위험</b> — 낮음 / 보통 / 높음, 각각 한 줄 설명</li>
+            <li><b>3 기간</b> — 1~30일 슬라이더</li>
+            <li><b>4 레그 수</b> — 숫자 선택 또는 "자동"(목표 배당에 맞춰 결정)</li>
+            <li><b>5 팀·리그</b> <span class="pill pro">PRO</span> — 건너뛸 수 있음</li>
+            <li><b>6 조건 필터</b> <span class="pill pro">PRO</span> — 건너뛸 수 있음</li>
+            <li><b>7 목표 배당</b> — 범위 슬라이더, 끄고 켤 수 있음</li>
+          </ul>
+        </dd>
+        <dt>실패했을 때</dt>
+        <dd>조건에 맞는 경기가 부족하면 <b>무엇 때문인지 지목합니다</b> —
+            "배당이 붙은 경기가 1개뿐", "레그 3개를 총 배당 5–8에 못 맞춤" 등.</dd>
+      </dl>
+      <div class="ask">
+        <p>리뷰 포인트</p>
+        <ul>
+          <li><b>가장 큰 질문입니다.</b> 1단계에 "바로 생성"이 있다면, 나머지
+              6단계는 무엇을 위한 것으로 읽힙니까? 단축이 마법사를 무의미하게
+              만드는지, 아니면 정확히 있어야 할 자리인지.</li>
+          <li>7단계 중 2개가 Pro 잠금이고 건너뛸 수 있습니다. 무료 사용자에게
+              이 두 단계는 <b>광고로 읽히는지</b>.</li>
+          <li>「위험 수준」과 「목표 배당」은 사실상 같은 축(배당 크기)을 두 번
+              묻습니다. 합쳐야 합니까?</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen">
+    <div>
+      <div class="dev">
+        <div class="dev-cap">09 · SLIP RESULT</div>
+        <div class="dev-bar"><span class="lead">←</span>베팅 슬립<span class="trail">저장</span></div>
+        <div class="dev-body">
+          <div class="d-card lime">
+            <div class="d-row"><span class="d-m">총 배당</span><span class="v" style="font-size:16px;color:#CCFF00;">6.42</span></div>
+            <div class="d-m">3 레그 · 보통 위험</div>
+            <div class="d-m" style="color:#4CAF50;">목표 배당 충족</div>
+          </div>
+          <div class="d-h">조합 경기</div>
+          <div class="d-card">
+            <div class="d-m">수 17 9월 20:45 · 프리미어리그</div>
+            <div class="d-h" style="font-size:11px;">아스날 vs 첼시</div>
+            <div class="d-pick">홈 · 1.85</div>
+            <div class="d-row"><span class="d-m">신뢰도</span><span class="v">62%</span></div>
+          </div>
+          <div class="d-card">
+            <div class="d-m">목 18 9월 22:00 · 라리가</div>
+            <div class="d-h" style="font-size:11px;">세비야 vs 베티스</div>
+            <div class="d-pick">홈 · 2.10</div>
+            <div class="d-row"><span class="d-m">신뢰도</span><span class="v">55%</span></div>
+          </div>
+          <div class="d-h">분석</div>
+          <div class="d-card">
+            <div class="d-row"><span class="d-m">경기당 평균 신뢰도</span><span class="v">58%</span></div>
+            <div class="d-m">모든 레그가 적중할 추정 확률 — 예측 우위가 아닙니다.</div>
+          </div>
+          <div class="d-btn">이 슬립 저장</div>
+        </div>
+      </div>
+    </div>
+    <div class="spec">
+      <h3>슬립 결과 <span class="pill paid">다이아 10</span></h3>
+      <p class="path">slip_result_screen.dart</p>
+      <dl>
+        <dt>비용</dt>
+        <dd>플랜별 일일 무료 슬립이 있고, 소진되면 <b>생성 전에</b> "다이아 10개를
+            쓸까요?" 확인 다이얼로그가 뜹니다. 잔액도 같이 보여줍니다.</dd>
+        <dt>정직함 장치</dt>
+        <dd>
+          <ul>
+            <li>목표 배당을 <b>못 맞췄으면 못 맞췄다고</b> 씁니다</li>
+            <li>사용자가 지정한 경기가 빠졌으면 <b>몇 개가 빠졌는지</b> 씁니다</li>
+            <li>"모든 레그 적중 추정 확률" 옆에 예측 우위가 아니라고 붙입니다</li>
+          </ul>
+        </dd>
+      </dl>
+      <div class="ask">
+        <p>리뷰 포인트</p>
+        <ul>
+          <li>돈(다이아)을 쓰고 나서 보는 화면입니다. <b>지불한 값어치가
+              느껴집니까?</b> 무엇이 더 있어야 합니까?</li>
+          <li>총 배당이 가장 크게 나옵니다. 그게 이 화면의 주인공이 맞습니까,
+              아니면 신뢰도여야 합니까?</li>
+          <li>「저장」을 안 누르면 사라집니다. 다이아를 쓴 결과물인데
+              <b>자동 저장이 아닌 것</b>이 맞습니까?</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ================================================================== -->
+<section class="sec-wrap">
+  <p class="sec-kicker">Flow 04 · Tab 2 — B</p>
+  <h2 class="sec">컴포저 · 경기 찾기 — 세어 보고, 사서, 본다</h2>
+  <p class="sec-lede">
+    조건에 맞는 경기가 <b>몇 개인지는 무료</b>로 보여주고, <b>어느 경기인지</b>를
+    다이아로 팝니다. 사기 전에 필터가 쓸모 있었는지 판단할 수 있게 하려는 구조입니다.
+  </p>
+
+  <div class="flow">
+    <ol>
+      <li><span class="node start">경기 찾기</span></li>
+      <li><span class="arrow">→</span><span class="node">종목 탭</span></li>
+      <li><span class="arrow">→</span><span class="node">필터 시트</span></li>
+      <li><span class="arrow">→</span><span class="node">검색</span></li>
+      <li><span class="arrow">→</span><span class="node">개수 · 리그 분포 (무료)</span></li>
+      <li><span class="arrow">→</span><span class="node">열람 <span class="pill paid">유료</span></span></li>
+      <li><span class="arrow">→</span><span class="node">경기 목록</span></li>
+      <li><span class="arrow">→</span><span class="node end">슬립 빌더</span></li>
+    </ol>
+  </div>
+
+  <div class="screen">
+    <div>
+      <div class="dev">
+        <div class="dev-cap">10 · FINDER — CONDITIONS</div>
+        <div class="dev-bar">컴포저</div>
+        <div class="dev-tabs"><span>베팅 슬립</span><span class="on">경기 찾기</span></div>
+        <div class="dev-tabs" style="border-top:1px solid #2C2C34;">
+          <span class="on">전체</span><span>⚽ 축구</span><span>🏀 농구</span><span>⚾ 야구</span>
+        </div>
+        <div class="dev-body">
+          <div class="d-h">조건을 선택하세요</div>
+          <div class="d-m">여러 개를 조합할 수 있습니다. 모두 과거 기록 또는 현재
+            시장 가격에 근거한 사실입니다.</div>
+          <div class="d-h">스마트 필터</div>
+          <div class="d-chips">
+            <span class="d-chip on">상대전적 우위</span>
+            <span class="d-chip on">강한 시장 컨센서스</span>
+          </div>
+          <div class="d-btn ghost">필터 선택</div>
+          <div class="d-h">정밀 필터 <span class="d-lock">Pro</span></div>
+          <div class="d-m">앞으로 7일 이내 경기</div>
+          <div class="d-slider"><i style="width:22%"></i><b style="left:22%"></b></div>
+          <div class="d-btn">경기 검색</div>
+        </div>
+        <div class="d-nav"><span>예측</span><span class="on">컴포저</span><span>프리미엄</span><span>내 슬립</span><span>프로필</span></div>
+      </div>
+    </div>
+    <div class="spec">
+      <h3>경기 찾기 — 조건</h3>
+      <p class="path">finder_screen.dart</p>
+      <dl>
+        <dt>종목 탭 <b>(이번 빌드 신규)</b></dt>
+        <dd>예측 탭과 <b>같은 밑줄 탭바</b>를 씁니다. 「전체」로 열립니다 —
+            검색 결과에 여러 종목이 섞여 나올 수 있습니다.</dd>
+        <dt>스마트 필터가 종목을 따릅니다</dt>
+        <dd>모든 종목이 같은 통계 구조를 쓰지만 <b>의미가 옮겨가지 않습니다</b>.
+            "2.5 오버"는 축구에선 진짜 질문이고 농구에선 항상 참입니다.
+            그래서 종목별로 칩이 달라집니다:
+          <ul>
+            <li><b>전체</b> — 승률·연승·최근 폼·상대전적·배당 기반 12개</li>
+            <li><b>축구</b> — 위 12개 + 2.5 오버/언더 · 양팀 득점 · 무실점</li>
+            <li><b>농구/NHL/NFL/야구/핸드볼</b> — 각 종목 스케일의 고득점/저득점</li>
+          </ul>
+        </dd>
+        <dt>적용된 것만 보여줍니다</dt>
+        <dd>칩 20여 개를 화면에 깔면 검색 버튼이 접히는 곳 아래로 내려갔습니다.
+            지금은 <b>고른 것만</b> 화면에 있고 나머지는 시트 안에 있습니다.</dd>
+      </dl>
+      <div class="ask">
+        <p>리뷰 포인트</p>
+        <ul>
+          <li>종목을 바꾸면 <b>이미 고른 칩이 소리 없이 사라집니다</b>
+              (그 종목에 의미가 없는 조건이라서). 사라진다는 걸 어떻게 알려야
+              합니까? 지금은 안내 한 줄뿐입니다.</li>
+          <li>"적용된 것만 보여주기"가 <b>무엇을 고를 수 있는지 감추는</b> 대가를
+              치릅니다. 시트를 열어야 카탈로그가 보입니다. 맞는 교환입니까?</li>
+          <li>Pro 정밀 필터가 무료 필터 <b>바로 아래</b> 붙어 있습니다.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen">
+    <div>
+      <div class="dev">
+        <div class="dev-cap">11 · FILTER SHEET</div>
+        <div class="dev-body" style="padding:0; opacity:.35;">
+          <div style="padding:20px 12px;" class="d-m">조건을 선택하세요…</div>
+        </div>
+        <div class="d-sheet">
+          <div class="d-grab"></div>
+          <div class="d-row"><span class="d-h">필터</span><span class="d-m">✕</span></div>
+          <div class="d-h" style="font-size:11px;">스마트 필터</div>
+          <div class="d-m">한 번 탭으로 추천 조건을 적용합니다.</div>
+          <div class="d-m" style="color:#FF9F43;">일부 조건은 그 종목에서만 의미가
+            있어 종목에 따라 바뀝니다.</div>
+          <div class="d-chips">
+            <span class="d-chip on">상대전적 우위</span><span class="d-chip">홈에서 강함</span>
+            <span class="d-chip">원정에서 강함</span><span class="d-chip">연승 중</span>
+            <span class="d-chip">최근 폼</span><span class="d-chip on">강한 시장 컨센서스</span>
+            <span class="d-chip">언더독 픽</span><span class="d-chip">인기팀 픽</span>
+            <span class="d-chip">낮은 마진</span><span class="d-chip">배당 1.5–2.5</span>
+            <span class="d-chip">시장이 불확실</span><span class="d-chip">안정적 · 좋은 가격</span>
+          </div>
+          <div class="d-h" style="font-size:11px;">내 프리셋</div>
+          <div class="d-m">아직 프리셋이 없습니다</div>
+          <div class="d-btn">적용</div>
+        </div>
+      </div>
+    </div>
+    <div class="spec">
+      <h3>필터 선택 시트</h3>
+      <p class="path">filter_picker_sheet.dart · 바텀시트, 75% 높이</p>
+      <dl>
+        <dt>담긴 것</dt>
+        <dd>스마트 필터 칩 전부 + 저장된 프리셋 목록. 프리셋을 고르면
+            <b>스마트 필터는 지워집니다</b> — 프리셋은 저장된 그대로 서버로
+            가기 때문에 섞으면 조용히 무시됩니다.</dd>
+        <dt>안내 문구</dt>
+        <dd>「일부 조건은 그 종목에서만…」은 <b>실제로 뭔가 가려질 때만</b>
+            나옵니다. 항상 띄우면 없는 칩을 찾게 만듭니다.</dd>
+      </dl>
+      <div class="ask">
+        <p>리뷰 포인트</p>
+        <ul>
+          <li>칩 12~16개가 한 덩어리로 깔립니다. <b>그룹이 필요합니까?</b>
+              (기록 기반 / 배당 기반 / 득점 기반)</li>
+          <li>칩 이름만으로 무슨 조건인지 전달됩니까?
+              「안정적 · 좋은 가격」 「시장이 불확실」 같은 것들.</li>
+          <li>스마트 필터와 프리셋이 <b>같은 시트에 있으면서 상호 배타</b>입니다.
+              고르면 다른 쪽이 지워집니다. 같은 화면에 있어야 합니까?</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen">
+    <div>
+      <div class="dev">
+        <div class="dev-cap">12 · RESULT — COUNT (FREE)</div>
+        <div class="dev-body">
+          <div class="d-card lime">
+            <div class="d-h" style="font-size:15px;">29경기</div>
+            <div class="d-m">조건에 맞는 경기</div>
+          </div>
+          <div class="d-h">리그 분포</div>
+          <div class="d-card">
+            <div class="d-row"><span class="d-m">프리미어리그</span><span class="v">8</span></div>
+            <div class="d-row"><span class="d-m">라리가</span><span class="v">6</span></div>
+            <div class="d-row"><span class="d-m">NBA</span><span class="v">5</span></div>
+          </div>
+          <div class="d-h">날짜 분포</div>
+          <div class="d-card">
+            <div class="d-row"><span class="d-m">9월 12일</span><span class="v">3</span></div>
+          </div>
+          <div class="d-chips">
+            <span class="d-chip on">킥오프 임박순</span><span class="d-chip">배당 높은순</span>
+          </div>
+          <div class="d-h">열람하기</div>
+          <div class="d-btn">1경기 · 5💎</div>
+          <div class="d-btn">5경기 · 20💎</div>
+          <div class="d-btn">전체 29경기 · 87💎</div>
+          <div class="d-m" style="font-size:9.5px;">이미 열람한 경기는 다시
+            과금되지 않습니다.</div>
+        </div>
+      </div>
+    </div>
+    <div class="spec">
+      <h3>검색 결과 — 개수만</h3>
+      <p class="path">finder_screen.dart · _ResultSummary</p>
+      <dl>
+        <dt>무료로 보여주는 것</dt>
+        <dd>총 개수 · 리그별 분포 · 날짜별 분포 · 정렬 선택.
+            <b>어느 경기인지만</b> 유료입니다.</dd>
+        <dt>가격</dt>
+        <dd>1경기 · 5경기 · 전체 3단계. 전체는 묶음 할인이 붙습니다.
+            플랜에 따라 <b>일일 무료 열람</b>이 있습니다.</dd>
+        <dt>일부러 감춘 것</dt>
+        <dd>"이 중 4개는 이미 열람하셨습니다"라는 줄이 있었는데 <b>지웠습니다</b> —
+            필터를 좁혀 가며 그 숫자를 보면 결제 없이 정보를 캘 수 있었습니다.
+            대신 "다시 과금되지 않는다"는 약속만 남겼습니다.</dd>
+      </dl>
+      <div class="ask">
+        <p>리뷰 포인트</p>
+        <ul>
+          <li>이 페이월이 <b>공정하게 느껴집니까?</b> "세어 주고 팔기"가
+              정직한 구조인지, 아니면 감질나게 하는 것인지.</li>
+          <li>가격 버튼 3개가 세로로 쌓여 있습니다. 어느 것이 기본이어야 합니까?</li>
+          <li>결과가 0개일 때 <b>"조건을 푸세요"만으로 충분합니까?</b>
+              어떤 조건이 몇 개를 잘랐는지 보여줘야 합니까?</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen">
+    <div>
+      <div class="dev">
+        <div class="dev-cap">13 · UNLOCKED MATCHES</div>
+        <div class="dev-bar"><span class="lead">←</span>열람한 경기</div>
+        <div class="dev-body">
+          <div class="d-m">5경기 열람 · 오늘 남은 무료 열람 3회</div>
+          <div class="d-card">
+            <div class="d-m">프리미어리그 · 수 17 9월 20:45</div>
+            <div class="d-h" style="font-size:11px;">아스날 vs 첼시</div>
+            <div class="d-pick">홈 · 1.85 · 신뢰도 62%</div>
+            <div class="d-h" style="font-size:10px; margin-top:3px;">이 경기가 충족한 조건</div>
+            <div class="d-chips">
+              <span class="d-chip on">상대전적 우위 · 67%</span>
+            </div>
+            <div class="d-m" style="font-size:9.5px;">6경기 기준</div>
+          </div>
+          <div class="d-card">
+            <div class="d-m">라리가 · 목 18 9월 22:00</div>
+            <div class="d-h" style="font-size:11px;">세비야 vs 베티스</div>
+            <div class="d-pick">홈 · 2.10 · 신뢰도 55%</div>
+          </div>
+          <div class="d-btn">이 경기들로 슬립 만들기</div>
+        </div>
+      </div>
+      <div class="dev" style="margin-top:12px;">
+        <div class="dev-cap">14 · SLIP BUILDER</div>
+        <div class="dev-bar"><span class="lead">←</span>선택한 경기로 슬립 만들기</div>
+        <div class="dev-body">
+          <div class="d-row"><span class="d-m">2경기 선택</span><span class="d-m">전체 선택 · 해제</span></div>
+          <div class="d-card lime">
+            <div class="d-h" style="font-size:11px;">선택한 경기만</div>
+            <div class="d-m">고른 경기 그대로, 곱해지는 배당 그대로.</div>
+          </div>
+          <div class="d-card">
+            <div class="d-h" style="font-size:11px;">더 큰 슬립에 포함</div>
+            <div class="d-m">고른 경기를 반드시 넣고, 목표 배당까지 다른 경기로 채웁니다.</div>
+          </div>
+          <div class="d-btn">슬립 만들기</div>
+        </div>
+      </div>
+    </div>
+    <div class="spec">
+      <h3>열람한 경기 → 슬립 빌더</h3>
+      <p class="path">finder_results_screen.dart · match_slip_builder_screen.dart</p>
+      <dl>
+        <dt>증거 칩</dt>
+        <dd>각 경기가 <b>어떤 조건을 왜 충족했는지</b> 실제 수치와 표본 크기로
+            보여줍니다 — "상대전적 우위 · 67% (6경기 기준)". 사용자가 지불한
+            것에 대한 근거입니다.</dd>
+        <dt>두 가지 모드</dt>
+        <dd>
+          <ul>
+            <li><b>선택한 경기만</b> — 고른 것 그대로 곱함</li>
+            <li><b>더 큰 슬립에 포함</b> — 고른 것을 반드시 넣고 목표 배당까지 채움</li>
+          </ul>
+        </dd>
+        <dt>재사용</dt>
+        <dd>열람한 경기는 <b>「내 슬립」 탭에 쌓입니다</b>. 경기가 시작할 때까지
+            몇 번이든 다시 슬립을 만들 수 있습니다.</dd>
+      </dl>
+      <div class="ask">
+        <p>리뷰 포인트</p>
+        <ul>
+          <li>증거 칩이 <b>지불의 정당화로 작동합니까?</b> 아니면 숫자 소음입니까?</li>
+          <li>두 모드의 차이가 카드 설명만으로 전달됩니까?</li>
+          <li>여기서 슬립을 만들면 <b>또 다이아가 듭니다</b> (열람 + 슬립 생성).
+              이중 과금으로 느껴집니까?</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ================================================================== -->
+<section class="sec-wrap">
+  <p class="sec-kicker">Flow 05 · Tab 3</p>
+  <h2 class="sec">프리미엄 — 파는 곳</h2>
+  <p class="sec-lede">
+    구독 3티어 × 2주기, 다이아 팩, 프리셋 슬롯 팩. 총 15개 인앱 상품이
+    한 화면에 있습니다.
+  </p>
+
+  <div class="flow">
+    <ol>
+      <li><span class="node start">프리미엄 탭</span></li>
+      <li><span class="arrow">→</span><span class="node">혜택 요약</span></li>
+      <li><span class="arrow">→</span><span class="node">구독 · 다이아 · 슬롯</span></li>
+      <li><span class="arrow">→</span><span class="node">App Store 결제</span></li>
+      <li><span class="branch">└ 요금제 비교표</span></li>
+    </ol>
+  </div>
+
+  <div class="screen">
+    <div>
+      <div class="dev">
+        <div class="dev-cap">15 · PREMIUM</div>
+        <div class="dev-bar">프리미엄<span class="trail">120 💎</span></div>
+        <div class="dev-body">
+          <div class="d-h" style="font-size:14px;">모든 기능을 잠금 해제하세요</div>
+          <div class="d-m">하루에 더 많은 슬립, 모든 마켓, 더 깊은 배당 정보.</div>
+          <div class="d-card">
+            <div class="d-m">✓ 모든 마켓 잠금 해제</div>
+            <div class="d-m">✓ 하루 더 많은 슬립</div>
+            <div class="d-m">✓ 배당 변동 · 북메이커 비교</div>
+            <div class="d-m">✓ 매일 경기 찾기 무료 열람</div>
+            <div class="d-m">✓ 광고 없음 (모든 유료 플랜)</div>
+          </div>
+          <div class="d-card lime">
+            <div class="d-row"><span class="d-h" style="font-size:11px;">Basic 연간</span><span class="v">₩149,000</span></div>
+            <div class="d-m">월 약 ₩12,417 · 최고 가치</div>
+          </div>
+          <div class="d-card">
+            <div class="d-row"><span class="d-h" style="font-size:11px;">Pro 월간</span><span class="v">₩19,000</span></div>
+          </div>
+          <div class="d-h">다이아</div>
+          <div class="d-card">
+            <div class="d-row"><span class="d-h" style="font-size:11px;">다이아 1,500개</span><span class="v">₩29,000</span></div>
+            <div class="d-m">1,500 💎</div>
+          </div>
+          <div class="d-h">프리셋 슬롯</div>
+          <div class="d-card">
+            <div class="d-row"><span class="d-h" style="font-size:11px;">프리셋 슬롯 +1개</span><span class="v">₩1,900</span></div>
+          </div>
+          <div class="d-btn ghost">구매 복원</div>
+          <div class="d-m" style="font-size:9.5px;">자동 갱신 구독입니다. 결제는
+            App Store 계정에 청구됩니다. · 이용약관 · 개인정보 처리방침</div>
+        </div>
+        <div class="d-nav"><span>예측</span><span>컴포저</span><span class="on">프리미엄</span><span>내 슬립</span><span>프로필</span></div>
+      </div>
+    </div>
+    <div class="spec">
+      <h3>프리미엄</h3>
+      <p class="path">premium_screen.dart · 인앱 상품 15개</p>
+      <dl>
+        <dt>파는 것</dt>
+        <dd>
+          <ul>
+            <li><b>구독</b> — Basic / Pro / Unlimited × 월간·연간 (6개)</li>
+            <li><b>다이아</b> — 소모성 재화, 슬립 생성과 경기 열람에 씀</li>
+            <li><b>프리셋 슬롯</b> — 영구, 저장 가능한 프리셋 수를 늘림</li>
+          </ul>
+        </dd>
+        <dt>이름 규칙</dt>
+        <dd>티어 이름(Basic/Pro/Unlimited)은 <b>번역하지 않습니다</b> —
+            App Store Connect와 영수증에 그대로 나오기 때문입니다.
+            나머지는 앱 언어를 따릅니다.</dd>
+        <dt>심사 필수 요소</dt>
+        <dd>구매 복원 버튼 · 구독 조건 문구 · 이용약관 / 개인정보 링크가
+            모두 이 화면 안에 있어야 합니다.</dd>
+      </dl>
+      <div class="ask">
+        <p>리뷰 포인트</p>
+        <ul>
+          <li><b>세 종류의 화폐가 한 화면에 있습니다</b> — 구독(권한),
+              다이아(소모), 슬롯(영구). 처음 보는 사람이 이 셋의 차이를
+              이해할 수 있습니까? 나눠야 합니까?</li>
+          <li>상품 15개를 한 스크롤에 넣었습니다. 어디서 잘라야 합니까?</li>
+          <li>혜택 요약이 <b>체크 5줄</b>입니다. 어느 것이 실제로 구매를
+              만들 것 같습니까?</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen">
+    <div>
+      <div class="dev">
+        <div class="dev-cap">16 · PLANS COMPARISON</div>
+        <div class="dev-bar"><span class="lead">←</span>플랜</div>
+        <div class="dev-body">
+          <div class="d-card">
+            <div class="d-h" style="font-size:11px;">무료</div>
+            <div class="d-m">1 슬립/일 · 경기 승자만</div>
+            <div class="d-m">경기 찾기 열람: 건별 결제</div>
+            <div class="d-m">슬립 10개 저장 · 배너 광고</div>
+          </div>
+          <div class="d-card">
+            <div class="d-h" style="font-size:11px;">Basic</div>
+            <div class="d-m">5 슬립/일 · 모든 마켓</div>
+            <div class="d-m">경기 찾기 열람 5회/일</div>
+            <div class="d-m">슬립 30개 저장 · 광고 없음</div>
+          </div>
+          <div class="d-card lime">
+            <div class="d-h" style="font-size:11px;">Pro</div>
+            <div class="d-m">15 슬립/일 · 열람 15회/일</div>
+            <div class="d-m">배당 변동 · 북메이커 비교</div>
+            <div class="d-m">팀 · 리그 · 조건 필터</div>
+          </div>
+          <div class="d-card">
+            <div class="d-h" style="font-size:11px;">Unlimited</div>
+            <div class="d-m">무제한 슬립/일 · 열람 40회/일</div>
+            <div class="d-m">우선 분석 · 저장 무제한</div>
+          </div>
+          <div class="d-m" style="font-size:9.5px;">결제는 앱스토어를 통해
+            청구됩니다. 업그레이드는 편의 기능을 열어 줄 뿐이며 결과를
+            보장하지 않습니다.</div>
+        </div>
+      </div>
+    </div>
+    <div class="spec">
+      <h3>요금제 비교</h3>
+      <p class="path">plans_screen.dart · 프로필에서도 진입</p>
+      <dl>
+        <dt>축</dt>
+        <dd>일일 슬립 수 · 마켓 범위 · 경기 찾기 무료 열람 · 배당 상세 ·
+            정밀 필터 · 저장 한도 · 광고</dd>
+        <dt>문구 원칙</dt>
+        <dd>"업그레이드는 <b>편의</b>를 열어 줄 뿐 결과를 보장하지 않는다"를
+            바닥에 고정으로 둡니다.</dd>
+      </dl>
+      <div class="ask">
+        <p>리뷰 포인트</p>
+        <ul>
+          <li>세로로 쌓인 카드 4장입니다. <b>가로 비교표</b>여야 합니까?
+              모바일에서 4열 표는 읽기 어렵습니다.</li>
+          <li>프리미엄 탭과 이 화면이 <b>둘 다 파는 화면</b>입니다.
+              하나로 합쳐야 합니까?</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ================================================================== -->
+<section class="sec-wrap">
+  <p class="sec-kicker">Flow 06 · Tab 4</p>
+  <h2 class="sec">내 슬립 — 결과가 돌아오는 곳</h2>
+  <p class="sec-lede">
+    저장한 슬립이 경기가 끝나면 자동으로 채점됩니다. 앱에서 유일하게
+    <b>사용자가 옳았는지 틀렸는지</b>가 나오는 곳입니다.
+  </p>
+
+  <div class="flow">
+    <ol>
+      <li><span class="node start">내 슬립</span></li>
+      <li><span class="arrow">→</span><span class="node">저장한 슬립</span></li>
+      <li><span class="branch">├ 승 / 패 / 대기</span></li>
+      <li><span class="branch">└ CSV 내보내기</span></li>
+      <li><span class="arrow">→</span><span class="node end">열람한 경기 (재사용)</span></li>
+    </ol>
+  </div>
+
+  <div class="screen">
+    <div>
+      <div class="dev">
+        <div class="dev-cap">17 · MY SLIPS</div>
+        <div class="dev-bar">내 슬립<span class="trail">CSV</span></div>
+        <div class="dev-tabs"><span class="on">저장한 슬립</span><span>열람한 경기</span></div>
+        <div class="dev-body">
+          <div class="d-card lime">
+            <div class="d-h" style="font-size:11px;">내 기록</div>
+            <div class="d-row"><span class="d-m">슬립 적중률</span><span class="v">34%</span></div>
+            <div class="d-m">12승 · 23패</div>
+          </div>
+          <div class="d-card">
+            <div class="d-row">
+              <span class="d-m">9월 8일</span>
+              <span style="color:#4CAF50; font-weight:700;">적중</span>
+            </div>
+            <div class="d-h" style="font-size:11px;">3 레그 · 6.42배</div>
+            <div class="d-m">아스날 v 첼시 · 세비야 v 베티스 …</div>
+          </div>
+          <div class="d-card">
+            <div class="d-row">
+              <span class="d-m">9월 9일</span>
+              <span style="color:#FF4D4D; font-weight:700;">실패</span>
+            </div>
+            <div class="d-h" style="font-size:11px;">4 레그 · 11.80배</div>
+          </div>
+          <div class="d-card">
+            <div class="d-row">
+              <span class="d-m">9월 12일</span>
+              <span style="color:#FF9F43; font-weight:700;">대기</span>
+            </div>
+            <div class="d-h" style="font-size:11px;">2 레그 · 3.55배</div>
+          </div>
+          <div class="d-m" style="font-size:9.5px;">저장한 슬립은 픽과 결과의
+            개인 기록일 뿐이며 실제 베팅이 아닙니다.</div>
+        </div>
+        <div class="d-nav"><span>예측</span><span>컴포저</span><span>프리미엄</span><span class="on">내 슬립</span><span>프로필</span></div>
+      </div>
+    </div>
+    <div class="spec">
+      <h3>내 슬립</h3>
+      <p class="path">my_slips_screen.dart · 탭 2개</p>
+      <dl>
+        <dt>저장한 슬립</dt>
+        <dd>적중 / 실패 / 대기. 상단에 누적 적중률과 승패. 당겨서 새로고침하면
+            결과를 다시 채점합니다.</dd>
+        <dt>열람한 경기</dt>
+        <dd>경기 찾기에서 돈 주고 연 경기들. <b>"이미 지불하셨습니다.
+            경기가 시작할 때까지 몇 번이든 슬립을 만드세요."</b></dd>
+        <dt>CSV 내보내기</dt>
+        <dd>클립보드로 복사. 자기 기록을 앱 밖으로 가져갈 수 있게.</dd>
+      </dl>
+      <div class="ask">
+        <p>리뷰 포인트</p>
+        <ul>
+          <li><b>적중률 34%를 크게 보여주는 게 맞습니까?</b> 정직하지만
+              재방문을 막을 수도 있습니다. 멀티레그 슬립은 원래 적중률이
+              낮습니다 — 그 맥락을 같이 줘야 합니까?</li>
+          <li>「저장한 슬립」과 「열람한 경기」가 성격이 많이 다릅니다.
+              같은 탭에 있어야 합니까?</li>
+          <li>대기 중인 슬립에 <b>경기 시작 시각까지 남은 시간</b>이
+              필요합니까?</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ================================================================== -->
+<section class="sec-wrap">
+  <p class="sec-kicker">Flow 07 · Tab 5</p>
+  <h2 class="sec">프로필 — 계정과 나머지 전부</h2>
+  <p class="sec-lede">
+    로그인, 프리셋, 도구, 설정, 법적 고지가 한 목록에 있습니다.
+    여기서 갈라지는 화면이 7개입니다.
+  </p>
+
+  <div class="flow">
+    <ol>
+      <li><span class="node start">프로필</span></li>
+      <li><span class="arrow">→</span><span class="node">내 프리셋</span></li>
+      <li><span class="branch">└ 프리셋 기록</span></li>
+      <li><span class="node">플랜 및 구독</span></li>
+      <li><span class="arrow">→</span><span class="node">베팅 금액 계산</span></li>
+      <li><span class="arrow">→</span><span class="node">언어</span></li>
+      <li><span class="arrow">→</span><span class="node">책임감 있는 베팅</span></li>
+      <li><span class="arrow">→</span><span class="node end">약관 · 개인정보</span></li>
+    </ol>
+  </div>
+
+  <div class="screen">
+    <div>
+      <div class="dev">
+        <div class="dev-cap">18 · PROFILE</div>
+        <div class="dev-bar">프로필</div>
+        <div class="dev-body">
+          <div class="d-card">
+            <div class="d-h" style="font-size:11px;">이길창</div>
+            <div class="d-m">프리미엄</div>
+            <div class="d-row"><span class="d-m">다이아</span><span class="v">120 💎</span></div>
+          </div>
+          <div class="d-m">🔖 내 프리셋</div>
+          <div class="d-m">🏆 플랜 및 구독</div>
+          <div class="d-m">🧮 베팅 금액 계산 (교육용)</div>
+          <div class="d-m">🌐 언어</div>
+          <div class="d-card">
+            <div class="d-row"><span class="d-m">📊 익명 사용 데이터 공유</span><span class="v">ON</span></div>
+            <div class="d-m" style="font-size:9.5px;">켜짐 — 무엇을 고쳐야 할지
+              알려주는 것이 이것입니다.</div>
+          </div>
+          <div class="d-m">🛡 책임감 있는 베팅</div>
+          <div class="d-m">🔒 개인정보 처리방침</div>
+          <div class="d-m">📄 이용약관</div>
+          <div class="d-m" style="margin-top:8px;">로그아웃</div>
+          <div class="d-m" style="color:#FF4D4D;">계정 삭제</div>
+        </div>
+        <div class="d-nav"><span>예측</span><span>컴포저</span><span>프리미엄</span><span>내 슬립</span><span class="on">프로필</span></div>
+      </div>
+    </div>
+    <div class="spec">
+      <h3>프로필</h3>
+      <p class="path">profile_screen.dart · 하위 7화면</p>
+      <dl>
+        <dt>로그인</dt>
+        <dd>Apple / Google. 로그아웃 상태에서는 이름 자리가 「로그인하지 않음」.</dd>
+        <dt>목록 순서</dt>
+        <dd>기능(프리셋·플랜·계산기) → 설정(언어·분석 동의) →
+            법적 고지(책임 베팅·개인정보·약관) → <b>계정 동작은 맨 아래</b>.</dd>
+        <dt>분석 동의 토글</dt>
+        <dd>다른 화면으로 들어가지 않고 <b>목록 안에서</b> 끕니다 —
+            동의를 거두는 게 주는 것만큼 쉬워야 하므로.</dd>
+        <dt>계정 삭제</dt>
+        <dd>확인 다이얼로그 후 실제 삭제. App Store 심사 필수 항목입니다.</dd>
+      </dl>
+      <div class="ask">
+        <p>리뷰 포인트</p>
+        <ul>
+          <li>목록 항목이 <b>8개 + 계정 동작 2개</b>입니다. 성격이 다른 것들이
+              한 줄씩 쌓여 있습니다. 구분선이나 소제목이 필요합니까?</li>
+          <li>「베팅 금액 계산 (교육용)」이 기능 목록에 섞여 있습니다.
+              이 도구가 프로필에 있는 게 맞습니까?</li>
+          <li>「플랜 및 구독」이 하단 탭의 「프리미엄」과 <b>거의 같은 곳</b>으로
+              갑니다. 중복입니까?</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen">
+    <div>
+      <div class="dev">
+        <div class="dev-cap">19 · PRESETS</div>
+        <div class="dev-bar"><span class="lead">←</span>내 프리셋</div>
+        <div class="dev-body">
+          <div class="d-m">2개 저장 · 총 3개 슬롯</div>
+          <div class="d-m" style="font-size:9.5px;">드래그해서 순서를 바꾸세요.
+            플랜이 바뀌면 위쪽이 유지됩니다.</div>
+          <div class="d-card">
+            <div class="d-h" style="font-size:11px;">홈 인기팀</div>
+            <div class="d-m">3개 조건 · 축구</div>
+            <div class="d-row"><span class="d-m">적중률</span><span class="v">41%</span></div>
+            <div class="d-btn ghost" style="margin-top:4px;">경기 찾기</div>
+          </div>
+          <div class="d-card" style="border-style:dashed;">
+            <div class="d-row">
+              <span class="d-h" style="font-size:11px;">언더독 사냥</span>
+              <span class="d-lock">잠김</span>
+            </div>
+            <div class="d-m" style="font-size:9.5px;">저장돼 있지만 지금 플랜에
+              슬롯이 없습니다. 삭제되지 않았습니다.</div>
+          </div>
+        </div>
+      </div>
+      <div class="dev" style="margin-top:12px;">
+        <div class="dev-cap">20 · PRESET RECORD</div>
+        <div class="dev-bar"><span class="lead">←</span>홈 인기팀 · 기록</div>
+        <div class="dev-body">
+          <div class="d-chips"><span class="d-chip on">전체 기간</span><span class="d-chip">최근 30일</span></div>
+          <div class="d-card lime">
+            <div class="d-row"><span class="d-m">적중률</span><span class="v" style="font-size:15px;">41%</span></div>
+            <div class="d-m">17개 중 7개 적중 · 3개 결과 대기</div>
+            <div class="d-m">시장 컨센서스 대비 +4%p</div>
+          </div>
+          <div class="d-card">
+            <div class="d-row"><span class="d-m">9월 8일 · 3레그 6.42</span><span style="color:#4CAF50;">적중</span></div>
+            <div class="d-row"><span class="d-m">9월 9일 · 4레그 11.80</span><span style="color:#FF4D4D;">실패</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="spec">
+      <h3>프리셋 · 프리셋 기록</h3>
+      <p class="path">presets_screen.dart · preset_record_screen.dart</p>
+      <dl>
+        <dt>프리셋이란</dt>
+        <dd>경기 찾기의 조건 묶음을 이름 붙여 저장한 것. 저장한 그대로 서버에
+            보내므로 <b>지금 화면에 없는 조건이 들어 있어도 그대로 재실행</b>됩니다.</dd>
+        <dt>슬롯 제한</dt>
+        <dd>플랜별로 저장 가능한 수가 다릅니다. 플랜을 내리면 초과분이
+            <b>「잠김」이 되고 삭제되지 않습니다</b>. 순서를 바꿔 어느 것을
+            살릴지 고를 수 있습니다.</dd>
+        <dt>기록</dt>
+        <dd>프리셋마다 적중률과 시장 컨센서스 대비 성적. 표본이 적으면
+            <b>숫자 대신 "결과가 아직 적습니다"</b>를 보여줍니다.</dd>
+      </dl>
+      <div class="ask">
+        <p>리뷰 포인트</p>
+        <ul>
+          <li>「잠김」 상태가 <b>이해됩니까?</b> 삭제되지 않았지만 쓸 수도 없는
+              상태입니다. 이렇게 두는 게 맞습니까, 아니면 그냥 지우고 알리는 게
+              정직합니까?</li>
+          <li>표본이 적을 때 숫자를 숨깁니다. <b>맞는 판단입니까?</b>
+              "41% (17개 중 7개)"를 그냥 보여주고 판단을 맡겨야 합니까?</li>
+          <li>프리셋이 <b>프로필 안</b>에 있습니다. 경기 찾기에서 만드는데
+              보관은 프로필입니다.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen">
+    <div>
+      <div class="dev">
+        <div class="dev-cap">21 · STAKING CALCULATOR</div>
+        <div class="dev-bar"><span class="lead">←</span>베팅 금액 계산</div>
+        <div class="dev-body">
+          <div class="d-card">
+            <div class="d-row"><span class="d-m">운용 자금</span><span class="v">1,000,000</span></div>
+            <div class="d-row"><span class="d-m">소수 배당</span><span class="v">2.10</span></div>
+            <div class="d-row"><span class="d-m">예상 승률 %</span><span class="v">52</span></div>
+          </div>
+          <div class="d-h">예시 베팅 금액</div>
+          <div class="d-card">
+            <div class="d-row"><span class="d-m">고정 2%</span><span class="v">20,000</span></div>
+            <div class="d-row"><span class="d-m">전체 켈리 (8.6%)</span><span class="v">86,000</span></div>
+            <div class="d-row"><span class="d-m">½ 켈리</span><span class="v">43,000</span></div>
+            <div class="d-row"><span class="d-m">¼ 켈리</span><span class="v">21,500</span></div>
+          </div>
+          <div class="d-m" style="font-size:9.5px;">전체 켈리는 공격적이며
+            승률 추정이 정확하다고 가정합니다. 추정은 틀리므로 ½·¼을
+            함께 보여줍니다.</div>
+        </div>
+      </div>
+      <div class="dev" style="margin-top:12px;">
+        <div class="dev-cap">22 · RESPONSIBLE BETTING</div>
+        <div class="dev-bar"><span class="lead">←</span>책임감 있는 베팅</div>
+        <div class="dev-body">
+          <div class="d-h">중요 안내</div>
+          <div class="d-m">SlipComposer는 북메이커 배당에서 도출한 시장 컨센서스
+            정보를 보여줍니다. 베팅을 받지 않습니다.</div>
+          <div class="d-h">지침</div>
+          <div class="d-m">· 예산을 정하고 지키세요</div>
+          <div class="d-m">· 손실을 만회하려 하지 마세요</div>
+          <div class="d-m">· 빌린 돈으로 베팅하지 마세요</div>
+          <div class="d-m">· 정기적으로 쉬세요</div>
+          <div class="d-m">· 쓴 시간과 돈을 기록하세요</div>
+          <div class="d-m">· 일상에 지장을 주지 않게 하세요</div>
+          <div class="d-h">도움이 필요하면</div>
+          <div class="d-m">문제가 되고 있다면 전문가의 도움을 받으세요.</div>
+        </div>
+      </div>
+    </div>
+    <div class="spec">
+      <h3>도구와 고지</h3>
+      <p class="path">staking_calculator_screen.dart · responsible_gaming_screen.dart · legal_screen.dart · language_screen.dart</p>
+      <dl>
+        <dt>베팅 금액 계산 (교육용)</dt>
+        <dd>켈리 공식 계산기. <b>전체 켈리를 권하지 않고</b> ½·¼을 같이
+            보여주며, 수학적 우위가 없으면 "0"이라고 씁니다.</dd>
+        <dt>책임감 있는 베팅</dt>
+        <dd>안내 · 지침 6개 · 면책 · 도움받을 곳. 심사에서 확인하는 화면입니다.</dd>
+        <dt>언어</dt>
+        <dd>시스템 기본 + 7개 언어. <b>앱을 다시 시작하지 않고</b> 그 자리에서
+            바뀝니다.</dd>
+        <dt>약관 · 개인정보</dt>
+        <dd>앱 안에 전문이 들어 있습니다(웹뷰가 아님). 최종 수정일 표기.</dd>
+      </dl>
+      <div class="ask">
+        <p>리뷰 포인트</p>
+        <ul>
+          <li>계산기가 <b>이 앱에 있어야 합니까?</b> 베팅을 받지 않는 앱이
+              베팅 금액을 계산해 주는 것이 메시지를 흐리는지.</li>
+          <li>「책임감 있는 베팅」이 프로필 목록의 <b>다른 항목들과 같은 무게</b>로
+              있습니다. 더 눈에 띄어야 합니까?</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ================================================================== -->
+<section class="sec-wrap">
+  <p class="sec-kicker">Reference</p>
+  <h2 class="sec">플랜별로 무엇이 열리나</h2>
+  <p class="sec-lede">
+    UX 판단에 필요한 경계입니다. 어떤 화면이 무료 사용자에게 어떻게 보이는지가
+    여기서 결정됩니다.
+  </p>
+
+  <div class="scroll-x">
+    <table class="matrix">
+      <thead>
+        <tr><th>항목</th><th>무료</th><th>Basic</th><th>Pro</th><th>Unlimited</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><b>일일 슬립</b></td><td>1</td><td>5</td><td>15</td><td>무제한</td></tr>
+        <tr><td><b>경기 찾기 무료 열람</b></td><td>0 · 건별 결제</td><td>5/일</td><td>15/일</td><td>40/일</td></tr>
+        <tr><td><b>마켓</b></td><td>경기 승자만</td><td>전체</td><td>전체</td><td>전체</td></tr>
+        <tr><td><b>배당 변동 · 북메이커 비교</b></td><td>—</td><td>—</td><td>✓</td><td>✓</td></tr>
+        <tr><td><b>팀·리그 · 조건 필터</b></td><td>—</td><td>—</td><td>✓</td><td>✓</td></tr>
+        <tr><td><b>슬립 저장 한도</b></td><td>10</td><td>30</td><td>100</td><td>무제한</td></tr>
+        <tr><td><b>광고</b></td><td>배너</td><td>없음</td><td>없음</td><td>없음</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="sec-lede" style="font-size:13px;">
+    다이아는 플랜과 <b>완전히 별개</b>입니다. 구독은 다이아를 주지 않습니다 —
+    사거나, 매일 로그인해서 모읍니다. 한때 Basic에 100💎, Pro에 300💎을 줬는데
+    슬립을 다이아로도 살 수 있게 되면서 표기된 일일 한도와 모순됐고
+    (하루 300💎이면 Pro의 15개가 아니라 45개), 가장 큰 다이아 팩(1,500💎)보다
+    구독 부수입이 커져 버려서 전부 0으로 내렸습니다.
+  </p>
+  <p class="sec-lede" style="font-size:13px;">
+    Basic과 Pro는 <b>슬립 수와 열람 수가 같은 숫자</b>입니다(5와 15). 구독으로
+    설명할 숫자를 하나로 줄이려는 의도인데, 두 기능을 하나의 숫자로 묶는 것이
+    이해에 도움이 되는지 아니면 오히려 헷갈리게 하는지 —
+    <b>이것도 봐주셨으면 하는 지점입니다.</b>
+  </p>
+</section>
+
+
+<footer class="end">
+  <h2>어떤 피드백이 필요한가</h2>
+  <ol>
+    <li><b>7단계 마법사</b>가 가장 걱정입니다. 1단계의 "바로 생성" 단축과
+        나머지 6단계가 서로를 무의미하게 만드는지.</li>
+    <li><b>페이월 구조</b> — 개수는 무료, 어느 경기인지는 유료. 정직하게
+        느껴지는지 감질나게 느껴지는지.</li>
+    <li><b>정보 밀도</b> — 신뢰도·시장 일치도·적중률·증거 칩이 다 %로 나옵니다.
+        사용자가 이것들을 구분할 수 있는지.</li>
+    <li><b>면책 문구의 빈도</b> — 법적으로 필요하지만 얼마나 자주 붙일지는
+        선택입니다. 지금은 카드마다 붙습니다.</li>
+    <li><b>진입 게이트 3연속</b> — 연령 · 동의 · 온보딩. 첫인상을 해치는지.</li>
+  </ol>
+  <p>
+    화면 단위 지적도 좋고, "이 앱은 결국 무엇을 하는 앱인지 모르겠다" 같은
+    큰 이야기도 좋습니다. 후자가 사실 더 필요합니다.
+  </p>
+  <p class="fine">
+    SlipComposer는 오락·정보 제공 목적입니다. 베팅을 받지 않고 자금을
+    보관하지 않습니다. 이 문서의 와이어프레임은 코드에서 재구성한 구조도이며
+    실제 화면의 스크린샷이 아닙니다. · 문의 ceo.sharppicklab@gmail.com
+  </p>
+</footer>
+
+</div>
+</body>
+</html>
