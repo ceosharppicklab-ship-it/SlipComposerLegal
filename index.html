@@ -131,6 +131,30 @@
   .step .bar{width:34px;height:2px;background:var(--surface-alt);margin:0 4px}
   @media(max-width:640px){.step .bar{display:none}.timeline{gap:10px}}
 
+  /* Funding-review blocks */
+  .kv{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin:22px 0 0}
+  .kv div{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px}
+  .kv .n{color:var(--accent);font-size:26px;font-weight:900;line-height:1.15;
+    font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+  .kv .t{font-size:13.5px;font-weight:700;margin-top:6px}
+  .kv .d{color:var(--muted);font-size:12.5px;margin-top:3px;line-height:1.5}
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:22px}
+  @media(max-width:760px){.split{grid-template-columns:1fr}}
+  .box{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:20px}
+  .box h3{margin:0 0 10px;font-size:17px}
+  .box p{margin:0 0 10px;color:var(--muted);font-size:14px}
+  .box p:last-child{margin-bottom:0}
+  .box ul{margin:0;padding-left:1.1em;color:var(--muted);font-size:14px}
+  .box li{margin-bottom:7px}
+  .box li:last-child{margin-bottom:0}
+  .box li b{color:var(--text)}
+  .tbl{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:8px}
+  .tbl th,.tbl td{border:1px solid var(--line);padding:8px 11px;text-align:left;vertical-align:top}
+  .tbl th{background:var(--surface-alt);font-weight:700;font-size:12.5px;white-space:nowrap}
+  .tbl td{color:var(--muted)}
+  .tbl td b{color:var(--text)}
+  .scroll-x{overflow-x:auto}
+
   /* Korean bilingual text (병기) */
   .ko{display:block;color:var(--muted);font-weight:400;font-size:.9em;line-height:1.55;margin-top:5px}
   h1 .ko{font-size:.46em;font-weight:800;color:var(--muted);margin-top:10px}
@@ -143,7 +167,7 @@
 </head>
 <body>
 
-<div class="ribbon">🚀 <b>Now in App Store review</b> — launching soon on iOS · <b>App Store 심사 진행 중</b></div>
+<div class="ribbon">🚀 <b>Build complete · preparing submission</b> — iOS · <b>개발 완료 · App Store 제출 준비 중</b></div>
 
 <header>
   <div class="wrap nav">
@@ -151,6 +175,7 @@
     <nav class="nav-links">
       <a href="#features">Features</a>
       <a href="#screens">Screens</a>
+      <a href="#business">Business</a>
       <a href="#responsible">Responsible play</a>
       <a class="btn" href="#get">Get the app</a>
     </nav>
@@ -161,7 +186,7 @@
 <div class="hero">
   <div class="wrap hero-grid">
     <div>
-      <span class="status"><span class="live"></span> In App Store review · Coming soon · 심사 진행 중</span>
+      <span class="status"><span class="live"></span> Build complete · preparing submission · 개발 완료 · 제출 준비 중</span>
       <h1>Sports stats &amp; a smarter <span class="hl">slip builder</span>.
         <span class="ko">스포츠 통계와 더 똑똑한 슬립 빌더</span></h1>
       <p class="lead">
@@ -249,10 +274,6 @@
         <figcaption class="cap">Match detail &amp; odds<span class="ko">경기 상세 &amp; 배당</span></figcaption>
       </figure>
       <figure class="shot" style="margin:0">
-        <div class="frame"><img src="screenshots/03-betwizard.png" alt="Slip builder" loading="lazy"></div>
-        <figcaption class="cap">Slip builder<span class="ko">슬립 빌더</span></figcaption>
-      </figure>
-      <figure class="shot" style="margin:0">
         <div class="frame"><img src="screenshots/03-betwizard-result.png" alt="Slip result" loading="lazy"></div>
         <figcaption class="cap">Generated slip<span class="ko">생성된 슬립</span></figcaption>
       </figure>
@@ -265,10 +286,180 @@
         <figcaption class="cap">Responsible play<span class="ko">책임 있는 이용</span></figcaption>
       </figure>
     </div>
+    <p class="muted" style="font-size:13px;margin:14px 0 0">
+      Captures are from an earlier build; the shipping version adds a fifth tab
+      and seven languages.
+      <span class="ko">위 캡처는 이전 빌드 기준입니다. 출시 빌드는 하단 탭이
+      5개로 늘고 7개 언어를 지원합니다.</span>
+    </p>
   </div>
 </section>
 
 <!-- COMPLIANCE / RESPONSIBLE -->
+<!-- BUSINESS / 지원사업 -->
+<section class="wrap" id="business" style="padding:56px 0 8px">
+  <span class="eyebrow">Business · 사업 개요</span>
+  <h2>What we are building, and what it costs
+    <span class="ko">무엇을 만들고 있고, 비용 구조는 어떤가</span></h2>
+  <p class="section-sub">
+    Figures below are the app's actual constants — registered product prices,
+    server-side costs and grant amounts read from the code, not projections.
+    <span class="ko">아래 수치는 추정이 아니라 실제 등록된 상품 가격과 서버 코드의
+    상수값입니다.</span>
+  </p>
+
+  <div class="kv">
+    <div>
+      <div class="n">22</div>
+      <div class="t">Screens shipped <span class="ko">구현 화면</span></div>
+      <div class="d">진입 게이트 3 + 탭 5 + 하위 화면 14</div>
+    </div>
+    <div>
+      <div class="n">7</div>
+      <div class="t">Languages <span class="ko">지원 언어</span></div>
+      <div class="d">한국어·영어·스페인어·포르투갈어·독일어·일본어·중국어</div>
+    </div>
+    <div>
+      <div class="n">8</div>
+      <div class="t">Sports live <span class="ko">서비스 종목</span></div>
+      <div class="d">데이터 검증을 통과한 종목만 노출</div>
+    </div>
+    <div>
+      <div class="n">15</div>
+      <div class="t">In-app products <span class="ko">인앱 상품</span></div>
+      <div class="d">구독 6 · 다이아 6 · 프리셋 슬롯 3</div>
+    </div>
+  </div>
+
+  <div class="split">
+    <div class="box">
+      <h3>The problem <span class="ko">문제 정의</span></h3>
+      <p>
+        스포츠 예측 앱 시장은 <b style="color:var(--text)">"AI 적중률 90%"</b>류의
+        검증 불가능한 주장으로 채워져 있습니다. 사용자는 근거를 확인할 수 없고,
+        앱 스토어는 이런 앱을 도박 정책(Guideline 5.3)으로 반복 리젝합니다.
+      </p>
+      <p>
+        동시에 여러 북메이커의 배당을 직접 비교하고 조합을 짜는 일은
+        수작업이 많이 드는데, 그 과정을 대신해 주는 도구는
+        <b style="color:var(--text)">베팅 유도와 묶여</b> 나옵니다.
+      </p>
+    </div>
+    <div class="box">
+      <h3>Our answer <span class="ko">해결 방식</span></h3>
+      <p>
+        예측 우위를 <b style="color:var(--text)">주장하지 않습니다.</b> 화면의
+        신뢰도 %는 북메이커 마진(overround)을 제거한 시장 컨센서스 확률이며,
+        "시장이 이 결과를 이 정도로 본다"는 사실 진술입니다.
+      </p>
+      <p>
+        베팅을 받지 않고, 자금을 보관하지 않고, 북메이커로 내보내지 않습니다.
+        그 결과 <b style="color:var(--text)">정책 리스크가 구조적으로 낮고</b>,
+        조합 도구라는 기능적 차별점만 남습니다.
+      </p>
+    </div>
+  </div>
+
+  <div class="split">
+    <div class="box">
+      <h3>Technology <span class="ko">기술 구성</span></h3>
+      <ul>
+        <li><b>데이터 파이프라인</b> — StatPal(심층 통계·배당) + Highlightly(비축구)를
+            자체 백엔드가 정제하고 앱 전용 BFF가 조립</li>
+        <li><b>피드 게이팅</b> — 배당이 붙은 예정 경기가 기준 미달인 종목은
+            자동으로 노출에서 제외. 빈 화면을 구조적으로 차단</li>
+        <li><b>서버측 영수증 검증</b> — Apple JWS / Google Play를 서버가 검증한 뒤에만
+            권한 부여. 클라이언트가 스스로 지급하지 못함</li>
+        <li><b>다이아 3-지갑 원장</b> — 구독분·무료분·구매분을 분리 기록해
+            환불 시 출처대로 되돌림</li>
+        <li><b>단일 코드베이스</b> — Flutter로 iOS·Android 동시 커버</li>
+      </ul>
+    </div>
+    <div class="box">
+      <h3>Revenue model <span class="ko">수익 모델</span></h3>
+      <div class="scroll-x">
+        <table class="tbl">
+          <tr><th>구분</th><th>상품</th><th>가격(USD)</th></tr>
+          <tr><td rowspan="3"><b>구독</b></td><td>Basic 월/연</td><td>$9.99 / $99.99</td></tr>
+          <tr><td>Pro 월/연</td><td>$19.99 / $199.99</td></tr>
+          <tr><td>Unlimited 월/연</td><td>$29.99 / $299.99</td></tr>
+          <tr><td><b>다이아</b></td><td>10 ~ 1,500💎</td><td>$0.99 ~ $99.99</td></tr>
+          <tr><td><b>슬롯</b></td><td>+1 ~ +10</td><td>$0.99 ~ $4.99</td></tr>
+        </table>
+      </div>
+      <p style="margin-top:10px">
+        연간 구독은 12개월에서 2개월 할인(≈17%). 무료 플랜은 배너 광고,
+        유료 플랜은 전부 광고 제거.
+      </p>
+    </div>
+  </div>
+
+  <div class="split">
+    <div class="box">
+      <h3>Cost structure <span class="ko">비용 구조</span></h3>
+      <ul>
+        <li><b>배당 데이터(변동비, 최대 항목)</b> — 갱신이 리그당 유료 호출 1회씩
+            1시간 주기로 발생. 즉 <b>리그 수 × 24 × 30</b> 호출/월</li>
+        <li><b>호스팅(준고정비)</b> — 백엔드 + PostgreSQL</li>
+        <li><b>Firebase</b> — 인증·푸시·크래시·분석. 현 규모에서는 무료 한도 내</li>
+        <li><b>Apple 수수료</b> — 연 매출 100만 달러 미만 시 15%.
+            Basic $9.99 → 실수령 $8.49</li>
+      </ul>
+      <p style="margin-top:10px">
+        핵심 특성은 <b style="color:var(--text)">비용이 사용자 수가 아니라 노출
+        리그 수에 비례</b>한다는 점입니다. 종목 확장은 매출보다 비용이 먼저
+        오르므로 단계적으로 엽니다.
+      </p>
+    </div>
+    <div class="box">
+      <h3>Break-even <span class="ko">손익분기</span></h3>
+      <p style="font-family:ui-monospace,monospace;font-size:13px;color:var(--text)">
+        필요 구독자 = 월 고정·변동비 ÷ (구독가 × 0.85)
+      </p>
+      <p>
+        Basic 기준 구독자 1명당 월 <b style="color:var(--text)">$8.49</b>.
+        월 운영비가 $850이면 100명, $2,000이면 236명입니다.
+      </p>
+      <p>
+        구독은 다이아보다 압도적으로 저렴합니다 — Basic이 주는 월
+        2,250💎어치를 다이아로 사면 약 $150로, <b style="color:var(--text)">구독이
+        15배</b>(Pro는 22배) 쌉니다. 규칙적 사용자는 구독으로 수렴하고,
+        다이아는 무료 티어 바로 위 구간을 담당합니다.
+      </p>
+    </div>
+  </div>
+
+  <div class="split">
+    <div class="box">
+      <h3>Competitive position <span class="ko">경쟁 포지션</span></h3>
+      <div class="scroll-x">
+        <table class="tbl">
+          <tr><th>구분</th><th>SlipComposer</th><th>예측형</th><th>스코어형</th><th>팁스터형</th></tr>
+          <tr><td><b>신뢰도</b></td><td><b>마진 제거 컨센서스</b></td><td>"AI 적중률"</td><td>부가적</td><td>팁스터 승률</td></tr>
+          <tr><td><b>멀티레그 조합</b></td><td><b>✅ 핵심</b></td><td>일부</td><td>❌</td><td>❌</td></tr>
+          <tr><td><b>라이브 스코어</b></td><td>❌</td><td>제한적</td><td><b>✅</b></td><td>부분</td></tr>
+          <tr><td><b>수익 모델</b></td><td>구독+다이아</td><td>광고+구독</td><td>광고+구독</td><td>제휴</td></tr>
+          <tr><td><b>정책 리스크</b></td><td><b>낮음</b></td><td>중간</td><td>낮음</td><td>높음</td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="box">
+      <h3>Risks we are carrying <span class="ko">인지하고 있는 리스크</span></h3>
+      <ul>
+        <li><b>데이터 벤더 단일 의존</b> — 가격 인상·중단 시 제품이 멈춥니다.
+            대체 소스 확보가 다음 과제</li>
+        <li><b>비용이 리그 수에 비례</b> — 확장 속도를 매출이 아니라
+            비용이 결정합니다</li>
+        <li><b>재방문 동기가 채점 중심</b> — 라이브 스코어·커뮤니티가 없어
+            경기 중 유입이 약합니다</li>
+        <li><b>획득 경로 부재</b> — 공유·초대 장치가 없어 초기 유입이
+            ASO와 유료 광고에 의존합니다</li>
+        <li><b>1인 개발·운영</b> — 단일 실패 지점</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
 <div class="band" id="responsible">
   <section class="wrap">
     <span class="eyebrow">Important · 중요 고지</span>
@@ -316,20 +507,23 @@
 <!-- GET -->
 <section id="get" style="text-align:center">
   <div class="wrap">
-    <span class="status"><span class="live"></span> In App Store review · Coming soon · 심사 진행 중</span>
-    <h2>Launching soon on the App Store
-      <span class="ko">App Store 출시 임박</span></h2>
+    <span class="status"><span class="live"></span> Build complete · preparing submission · 개발 완료 · 제출 준비 중</span>
+    <h2>Where the build stands
+      <span class="ko">현재 진행 단계</span></h2>
     <p class="section-sub" style="margin-left:auto;margin-right:auto">
-      The app is built and submitted — currently in Apple's App Store review.
-      iOS launch is imminent. <b style="color:var(--text)">App Store 심사 진행 중 · 출시 임박.</b>
-      <span class="ko">앱 개발을 마치고 제출을 완료해 현재 Apple App Store 심사 중이며,
-      iOS 출시가 임박했습니다.</span></p>
+      The app is built and running on device. All 15 in-app products are
+      registered, the store listing is written in seven languages, and the
+      build is going through final device testing before submission.
+      <b style="color:var(--text)">개발 완료 · 제출 준비 중.</b>
+      <span class="ko">앱은 개발을 마치고 실기기에서 동작 중입니다. 인앱 상품 15개
+      등록과 7개 언어 스토어 등재 문안이 완료됐고, 현재 제출 전 최종 실기기
+      테스트를 진행하고 있습니다.</span></p>
     <div class="timeline">
       <div class="step done"><span class="mk">✓</span><span class="lbl">Built<span class="ko">개발 완료</span></span></div>
       <span class="bar"></span>
-      <div class="step done"><span class="mk">✓</span><span class="lbl">Submitted<span class="ko">제출 완료</span></span></div>
+      <div class="step now"><span class="mk">●</span><span class="lbl">Device testing<span class="ko">실기기 테스트</span></span></div>
       <span class="bar"></span>
-      <div class="step now"><span class="mk">●</span><span class="lbl">In App Store review<span class="ko">심사 진행 중</span></span></div>
+      <div class="step todo"><span class="mk">3</span><span class="lbl">Submitted<span class="ko">제출</span></span></div>
       <span class="bar"></span>
       <div class="step todo"><span class="mk">4</span><span class="lbl">Launch<span class="ko">출시</span></span></div>
     </div>
